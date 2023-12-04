@@ -1,0 +1,141 @@
+/*=============== GOOGLE FONTS ===============*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/*=============== VARIABLES CSS ===============*/
+:root {
+  --header-height: ;
+
+  /*========== Colors ==========*/
+  /* Color mode HSL(hue, saturation, lightness) */
+  --Title-Active: hsla(241, 37%, 12%, 1) ; /*Used for both links and titles.*/
+  --Body:hsla(248, 16%, 35%, 1) ; /*Used for body copy text*/
+  --label:hsla(235, 14%, 50%, 1); /*Used for the label text.*/
+  --Placeholder: hsla(234, 18%, 69%, 1); /* Used for initial copy of inputs. */
+  --Line: hsla(233, 26%, 88%, 1); /* Used for line based elements.*/
+  --Input-Background: hsla(233, 30%, 95%, 1) ; /* Used for input bg accessibility.*/
+  --Background: hsla(233, 45%, 98%, 1); /* Used for element backgrounds.*/
+  --Off-white: hsla(233, 26%, 88%, 1); /* Used to avoid darkmode strain.*/
+  --Primary: hsla(256, 82%, 55%, 1); /*Used as the primary color.*/
+  --Primary-darkmode: hsla(256, 100%, 82%, 1); /*Used as the primary darkmode color.*/
+  
+  /*========== Font and typography ==========*/
+  /* .5rem = 8px | 1rem = 16px ... */
+  --body-font: "Poppins", system-ui;
+  --second-font: "Inter", system;
+  --h1-font-size: 3.25rem;
+  --h2-font-size: 2.25rem;
+  --h3-font-size: 1.5rem;
+  --h4-font-size: 1rem;
+  --large-font-size: 3rem;
+  --normal-font-size: 1.25rem;
+  --small-font-size: 1rem;
+  --smaller-font-size: .875rem;
+  --tiny-font-size: .75rem;
+
+  /*========== Font weight ==========*/
+  --weight-400: 400;
+  --weight-500: 500;
+  --weight-600: 600;
+  --weight-700: 700;
+
+  /*========== Transition ==========*/
+  --transition: ;
+}
+
+/* Responsive typography */
+@media screen and (max-width: 1200px) {
+  :root {
+    --big-font-size: ;
+    --h1-font-size: ;
+    --h2-font-size: ;
+    --h3-font-size: ;
+    --h4-font-size: ;
+    --large-font-size: ;
+    --normal-font-size: ;
+    --small-font-size: ;
+    --smaller-font-size: ;
+    --tiny-font-size: ;
+  }
+}
+
+/*=============== BASE ===============*/
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+
+/*=============== REUSABLE CSS CLASSES ===============*/
+
+/*=============== HEADER & NAV ===============*/
+
+/* Active link */
+
+/*=============== HOME ===============*/
+
+/*=============== BUTTONS ===============*/
+
+/*=============== CATEGORIES ===============*/
+
+/* Swiper class */
+
+/*=============== PRODUCTS ===============*/
+
+/* Active Tab */
+
+/* Product Hover */
+
+/*=============== DEALS ===============*/
+
+/*=============== NEW ARRIVALS ===============*/
+
+/*=============== SHOWCASE ===============*/
+
+/*=============== NEWSLETTER ===============*/
+
+/*=============== FOOTER ===============*/
+
+/*=============== BREADCRUMBS ===============*/
+
+/*=============== SHOP ===============*/
+
+/*=============== DETAILS ===============*/
+
+/*=============== DETAILS INFO & REVIEWS ===============*/
+
+/*=============== CART ===============*/
+
+/*=============== CART OTHERS ===============*/
+
+/*=============== WISHLIST ===============*/
+
+/*=============== CHECKOUT ===============*/
+
+/*=============== COMPARE ===============*/
+
+/*=============== LOGIN & REGISTER ===============*/
+
+/*=============== ACCOUNTS ===============*/
+
+/*=============== BREAKPOINTS ===============*/
+/* For large devices */
+@media screen and (max-width: 1400px) {
+}
+
+@media screen and (max-width: 1200px) {
+}
+
+/* For medium devices */
+@media screen and (max-width: 992px) {
+}
+
+@media screen and (max-width: 768px) {
+}
+
+/* For small devices */
+@media screen and (max-width: 576px) {
+}
+
+@media screen and (max-width: 350px) {
+}
