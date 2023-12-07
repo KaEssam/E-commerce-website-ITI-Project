@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!--=============== FONT ===============-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="/assets/css/styles.css" />
@@ -20,55 +23,136 @@
       <div class="header__top">
         <div class="header__top-container">
           <div class="header__top-left">
-            <p class="header__top-p">Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</p>
+            <p class="header__top-p">
+              Summer Sale For All Swim Suits And Free Express Delivery - OFF
+              50%!
+            </p>
             <p>
               <a href="#">SHOP NOW</a>
             </p>
           </div>
-        </div>      
+        </div>
       </div>
     </header>
-        
+
     <!--=============== NAV ===============-->
-      <nav class="nav-container">
-        
-        <div class="nav-logo_icon">
-          <a href="index.html" class="nav__logo">Excusive</a>
-        </div>
-        
-        <div class="nav__menu" id="nav-menu">
-          <ul class="nav__list">
-            <li class="nav__item"><a href="index.html" class="nav__link">Home</a></li>
-            <li class="nav__item"><a href="#" class="nav__link">Contact</a></li>
-            <li class="nav__item"><a href="/about.html" class="nav__link">About</a></li>
-            <li class="nav__item"><a href="/register.html" class="nav__link">Sine Up</a></li>
-          </ul>
-        
-          <div class="header__search">
-              <input type="text" placeholder="what are you looking for?" class="form__input" />
-              <button class="search__btn">
-                <img src="/assets/img/Search.png" alt="">
-              </button>
-          </div>
-        </div>
-          
+    <nav class="nav-container">
+      <div class="nav-logo_icon">
+        <a href="index.html" class="nav__logo">Excusive</a>
+      </div>
 
-        <div class="header__user-actions">
-          <a href="wishlist.html" class="header__action-btn">
-            <img src="/assets/img/Wishlist.png" alt="">
-              <span class="count">3</span>
-          </a>
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__list">
+          <li class="nav__item">
+            <a href="index.html" class="nav__link">Home</a>
+          </li>
+          <li class="nav__item"><a href="#" class="nav__link">Contact</a></li>
+          <li class="nav__item">
+            <a href="/about.html" class="nav__link">About</a>
+          </li>
+          <li class="nav__item">
+            <a href="/register.html" class="nav__link">Sine Up</a>
+          </li>
+        </ul>
 
-          <a href="cart.html" class="header__action-btn">
-            <img src="/assets/img/Cart.png" alt="">
-              <span class="count">3</span>
-          </a>
+        <div class="header__search">
+          <input
+            type="text"
+            placeholder="what are you looking for?"
+            class="form__input"
+          />
+          <button class="search__btn">
+            <img src="/assets/img/Search.png" alt="" />
+          </button>
         </div>
+      </div>
 
-      </nav>
+      <div class="header__user-actions">
+        <a href="wishlist.html" class="header__action-btn">
+          <img src="/assets/img/Wishlist.png" alt="" />
+          <span class="count">3</span>
+        </a>
+
+        <a href="cart.html" class="header__action-btn">
+          <img src="/assets/img/Cart.png" alt="" />
+          <span class="count">3</span>
+        </a>
+      </div>
+    </nav>
 
     <!--=============== MAIN ===============-->
     <main class="main">
+      <!--=============== FILTER ===============-->
+      <div class="main-filter">
+        <div class="main__container">
+          <ul class="main__filter-list">
+            <li>
+              <a href="#" class="filter__list-link">Woman's Fashion</a>
+            </li>
+
+            <li>
+              <a href="#" class="filter__list-link">Man's Fashion</a>
+            </li>
+
+            <li>
+              <a href="#" class="filter__list-link">Electronics</a>
+            </li>
+
+            <li>
+              <a href="#" class="filter__list-link">Home &amp; Lifestyle</a>
+            </li>
+
+            <li>
+              <a href="#" class="filter__list-link">Medicine</a>
+            </li>
+
+            <li>
+              <a href="#" class="filter__list-link">Sports &amp; Outdoor</a>
+            </li>
+
+            <li>
+              <a href="#" class="filter__list-link">Baby's &amp; Toys</a>
+            </li>
+
+            <li>
+              <a href="#" class="filter__list-link">Groceries &amp; Pets</a>
+            </li>
+
+            <li>
+              <a href="#" class="filter__list-link">Health &amp; Beauty</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="slider">
+          <div class="container">
+            <div class="wrapper">
+              <div class="myslider">
+                <div class="wrapper">
+                  <div class="slide">
+                    <div class="item">
+                      <div class="image object-cover">
+                        <img src="/assets/img/slider/slider0.jpg" alt="" />
+                      </div>
+                      <div class="text-content">
+                        <h4>Shoes Fashion</h4>
+                        <h2>
+                          <span>Come and Get it!</span><br /><span
+                            >Brand New Shoes</span
+                          >
+                        </h2>
+                        <button class="btn">
+                          <a href="#" class="text-btn">Shop Now</a>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!--=============== HOME ===============-->
       <section class="home"></section>
 
@@ -95,9 +179,7 @@
     <footer class="footer"></footer>
 
     <!--=============== SWIPER JS ===============-->
-    
 
     <!--=============== MAIN JS ===============-->
-    
   </body>
 </html>

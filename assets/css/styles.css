@@ -286,6 +286,95 @@ nav{
 } 
 /*=============== HOME ===============*/
 
+.main-filter {
+display: flex;
+width: 100%;
+}
+
+.main__container{
+border-right: 1px solid var(--colo-dark-2);
+width: 20%;
+}
+.main__filter-list{
+display: flex;
+flex-direction: column;
+gap: 1rem;
+justify-content: space-around;
+margin-left: 8.4rem;
+margin-top: 2rem;
+}
+
+.filter__list-link{
+font-size: var(--small-font-size);
+font-weight: var(--weight-400);
+font-family: var(--body-font);
+color: var(--colo-dark-1);
+}
+
+.slider > div > .wrapper{
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+
+.slider.item{
+  height: 300px;
+
+}
+
+.object-cover img {
+  position: absolute;
+  object-fit: cover;
+    width: 76rem;
+      height: 25rem;
+}
+
+.slider .text-content{
+  justify-content: center;
+  position: absolute;
+  justify-content: flex-end;
+  z-index: 1;
+  padding: 6rem 3rem;
+}
+
+.text-content h4{
+  font-size: var(--h4-font-size);
+  font-weight: var(--weight-600);
+  font-family: var(--body-font);
+  color: var(--Title-Active);
+  width: 30%;
+  padding: 0.5rem;
+  margin-bottom: .7rem;
+  background-color: var(--colo-dark-1);
+  color: var(--colo-white-1);
+  border-radius: .5rem;
+}
+
+.text-content h2 span{
+  font-size: var(--h1-font-size);
+  font-weight: var(--weight-900);
+  font-family: var(--body-font);
+  color: var(--Title-Active);
+  font-style: bold;
+}
+
+.text-content button{
+  margin-top: 2rem;
+}
+.text-content .text-btn{
+  padding: 1rem 2rem;
+  background-color: var(--colo-primary);
+  border-radius: 1.5rem;
+  color: var(--colo-white-1);
+  font-size: var(--small-font-size);
+  font-weight: var(--weight-600);
+  font-family: var(--body-font);
+  transition: all 0.2s var(--transition);
+}
+
+.text-content button:hover{
+  opacity: .8;
+}
+
 /*=============== BUTTONS ===============*/
 
 /*=============== CATEGORIES ===============*/
