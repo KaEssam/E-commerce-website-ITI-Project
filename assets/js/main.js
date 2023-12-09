@@ -16,12 +16,19 @@ const x = setInterval(function () {
   document.getElementById("hours").innerHTML = hours;
   document.getElementById("minutes").innerHTML = minutes;
   document.getElementById("seconds").innerHTML = seconds;
+  document.getElementById("day").innerHTML = days;
+  document.getElementById("hour").innerHTML = hours;
+  document.getElementById("minute").innerHTML = minutes;
+  document.getElementById("second").innerHTML = seconds;
 
   if (distance < 0) {
     clearInterval(x);
     document.getElementById("sales__timer").innerHTML = "EXPIRED";
+    document.getElementById("banner__timer").innerHTML = "EXPIRED";
   }
 }, 1000);
+
+/*=============== offer timer ===============*/
 
 /*===== Menu Show =====*/
 /* Validate if constant exists */
