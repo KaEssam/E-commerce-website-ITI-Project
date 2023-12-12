@@ -28,10 +28,73 @@ const x = setInterval(function () {
   }
 }, 1000);
 
-/*=============== offer timer ===============*/
+/*=============== sales slider ===============*/
 
-/*===== Menu Show =====*/
-/* Validate if constant exists */
+const sliderWrapper = document.getElementById("sliderWrapper");
+const prevButton = document.querySelector(
+  ".prodact__sales-control .btn:first-child"
+);
+const nextButton = document.querySelector(
+  ".prodact__sales-control .btn:last-child"
+);
+
+let currentPosition = 0;
+
+function updateSlider() {
+  sliderWrapper.style.transform = `translateX(${-currentPosition * 100}%)`;
+}
+
+function goToNextSlide() {
+  currentPosition = Math.min(currentPosition + 1, 2); // Assuming you have 3 slides
+  updateSlider();
+}
+
+function goToPrevSlide() {
+  currentPosition = Math.max(currentPosition - 1, 0);
+  updateSlider();
+}
+
+prevButton.addEventListener("click", goToPrevSlide);
+nextButton.addEventListener("click", goToNextSlide);
+
+/*=============== rating ===============*/
+
+document.addEventListener("DOMContentLoaded", function () {
+  const ratingContainers = document.querySelectorAll(".rate");
+
+  ratingContainers.forEach((container) => {
+    const stars = container.querySelectorAll(".rate__stars img");
+    const reviews = container.querySelector(".rate__reviews");
+    let userRating = 0;
+
+    stars.forEach((star, index) => {
+      star.addEventListener("mouseover", () => highlightStars(index));
+      star.addEventListener("mouseout", () => highlightStars(userRating - 1));
+      star.addEventListener("click", () => {
+        userRating = index + 1;
+        updateRating();
+      });
+    });
+
+    function highlightStars(index) {
+      stars.forEach((star, i) => {
+        if (i <= index) {
+          star.src = "/assets/img/star-fill.png";
+        } else {
+          star.src = "/assets/img/star-empty.png";
+        }
+      });
+    }
+
+    function updateRating() {
+      reviews.textContent = `(${userRating} ${
+        userRating === 1 ? "Review" : "Reviews"
+      })`;
+    }
+  });
+});
+
+/*=============== SWIPER ===============*/
 
 /*===== Hide Show =====*/
 /* Validate if constant exists */
