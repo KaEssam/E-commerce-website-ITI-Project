@@ -94,15 +94,32 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-/*=============== SWIPER ===============*/
+/*=============== form validation ===============*/
 
-/*===== Hide Show =====*/
-/* Validate if constant exists */
+function validateForm() {
+  var name = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var phone = document.getElementById("phone").value;
+  var message = document.getElementById("message").value;
 
-/*=============== IMAGE GALLERY ===============*/
+  if (name === "" || email === "" || phone === "" || message === "") {
+    alert("All fields must be filled out");
+    return false;
+  }
 
-/*=============== SWIPER CATEGORIES ===============*/
+  // Validate name format
+  var nameRegex = /^[a-zA-Z\s]+$/;
+  if (!nameRegex.test(name)) {
+    alert("Invalid name format. Only letters and spaces are allowed.");
+    return false;
+  }
 
-/*=============== SWIPER PRODUCTS ===============*/
+  // Validate email format
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert("Invalid email format");
+    return false;
+  }
 
-/*=============== PRODUCTS TABS ===============*/
+  return true;
+}
