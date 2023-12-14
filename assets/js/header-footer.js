@@ -123,17 +123,18 @@ class Header extends HTMLElement {
       </div>
 
       <div class="nav__menu" id="nav-menu">
-        <ul class="nav__list">
+             <ul class="nav__list">
           <li class="nav__item">
             <a href="index.html" class="nav__link">Home</a>
           </li>
-          <li class="nav__item"><a href="#" class="nav__link">Contact</a></li>
+          <li class="nav__item"><a href="/contact.html" class="nav__link">Contact</a></li>
           <li class="nav__item">
             <a href="/about.html" class="nav__link">About</a>
           </li>
           <li class="nav__item">
-            <a href="/register.html" class="nav__link">Sine Up</a>
+            <a href="/register.html" class="nav__link">Sign Up</a>
           </li>
+          
         </ul>
 
         <div class="header__search">
@@ -158,6 +159,8 @@ class Header extends HTMLElement {
           <img src="/assets/img/Cart.png" alt="" />
           <span class="count">3</span>
         </a>
+        
+</div>
       </div>
     </nav>`;
   }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="/assets/css/register.css" />
+
+    <title>Ecommerce contact</title>
+  </head>
+  <body>
+    <!--=============== HEADER ===============-->
+    <special-header></special-header>
+
+    <!--=============== MAIN ===============-->
+    <main class="main">
+      <div class="container">
+        <div class="img-login">
+          <img src="/assets/img/dl.beatsnoop 1.png" alt="" />
+        </div>
+
+        <div class="sign_up-box">
+          <h2>Create an account</h2>
+          <p>Enter your details below.</p>
+
+          <form id="sign-up" onsubmit="return validateForm()">
+            <div class="user-box">
+              <input type="text" name="" placeholder="Name" required />
+              <span id="nameError" class="error"></span>
+
+              <div class="user-box">
+                <input type="email" name="" placeholder="Email" required />
+              </div>
+              <span id="emailError" class="error"></span>
+
+              <div class="user-box">
+                <input
+                  type="password"
+                  name=""
+                  placeholder="Password"
+                  required
+                />
+              </div>
+
+              <span id="passwordError" class="error"></span>
+              <div class="btns-form">
+                <div class="sign_up-btns">
+                  <button type="submit" class="sign_up-btn" value="Log in">
+                    Sign Up
+                  </button>
+                </div>
+                <div class="have-acc">
+                  <p>Already have an account?</p>
+                  <a href="/login.html" class="have_acc-btn">Log in</a>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <!--=============== FOOTER ===============-->
+    <special-footer></special-footer>
+    <!--=============== MAIN JS ===============-->
+    <script src="/assets/js/main.js"></script>
+    <script type="module" src="/assets/js/header-footer.js"></script>
+  </body>
+</html>

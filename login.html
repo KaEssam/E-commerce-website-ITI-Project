@@ -4,40 +4,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!--=============== FLATICON ===============-->
-    <link rel="stylesheet" href="" />
-
-    <!--=============== SWIPER CSS ===============-->
-    <link rel="stylesheet" href="" />
-
     <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="/assets/css/login.css" />
 
-    <title>Ecommerce Website</title>
+    <title>Ecommerce contact</title>
   </head>
   <body>
     <!--=============== HEADER ===============-->
-    <header class="header"></header>
+    <special-header></special-header>
 
     <!--=============== MAIN ===============-->
     <main class="main">
-      <!--=============== BREADCRUMB ===============-->
-      <section class="breadcrumb"></section>
+      <div class="container">
+        <div class="img-login">
+          <img src="/assets/img/dl.beatsnoop 1.png" alt="" />
+        </div>
 
-      <!--=============== LOGIN-REGISTER ===============-->
-      <section class="login-register"></section>
+        <div class="login-box">
+          <h2>Log in to Exclusive</h2>
+          <p>Log in to your account to continue.</p>
+          <form id="myForm" onsubmit="return validateForm()">
+            <div class="user-box">
+              <input type="email" name="" placeholder="Email" required />
+              <span id="emailError" class="error"></span>
+            </div>
 
-      <!--=============== NEWSLETTER ===============-->
-      <section class="newsletter"></section>
+            <div class="user-box">
+              <input type="password" name="" placeholder="Password" required />
+              <span id="emailError" class="error"></span>
+            </div>
+
+            <div class="login-btns">
+              <button type="submit" class="login-btn" value="Log in">
+                Log in
+              </button>
+
+              <a href="#" class="forgot-btn">Forgot password?</a>
+            </div>
+          </form>
+        </div>
+      </div>
     </main>
 
     <!--=============== FOOTER ===============-->
-    <footer class="footer"></footer>
-
-    <!--=============== SWIPER JS ===============-->
-    <script src=""></script>
-
+    <special-footer></special-footer>
     <!--=============== MAIN JS ===============-->
-    <script src=""></script>
+    <script src="/assets/js/main.js"></script>
+    <script type="module" src="/assets/js/header-footer.js"></script>
   </body>
 </html>

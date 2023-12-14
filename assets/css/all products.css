@@ -1,0 +1,42 @@
+@import "/assets/css/styles.css";
+
+
+* {
+  box-sizing: border-box;
+  
+}
+
+/* .all-products{
+  margin-bottom: 3rem;
+  width: 100%;
+  height: 100%;
+}
+
+
+.products-container {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.products-header {
+  display: flex;
+  margin-bottom: 4rem;
+  margin-left: 5rem;
+  gap: 70rem;
+}
+
+.products__title-text{
+  font-size: var(--normal-font-size);
+  font-weight: 400;
+  color: #000;
+}
+
+
+
+.prodacts__items{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-right: 2rem;
+  gap: 3rem;
+  width: 90%;
+} */

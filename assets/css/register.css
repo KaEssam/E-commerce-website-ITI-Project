@@ -1,0 +1,143 @@
+@import "/assets/css/styles.css";
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  height: 100vh;
+  width: 100%;
+}
+
+.container{
+  display: flex;
+  gap: 7rem;
+  margin-top: 4rem;
+}
+
+.img-container{
+  width: 100%;
+  height: 100%; 
+
+}
+
+.user-box{
+  width: 500px;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.sign_up-box{
+  width: 500px;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px 35px 51px 35px;
+  box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.05);
+}
+
+.sign_up-box h2{
+  font-size: var(--h2-font-size);
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  letter-spacing: 2px;
+}
+
+.sign_up-box p{
+  font-size: var(--small-font-size);
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+
+
+.sign_up-box input{
+  width: 100%;
+  padding: 10px 0;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #999;
+  outline: none;
+  font-size: var(--small-font-size);
+  font-weight: 400;
+  background: transparent;
+}
+
+
+.sign_up-box placeholder{
+  font-size: var(--small-font-size);
+  font-weight: 400;
+  align-items: center;
+  text-align: center;
+}
+
+
+.sign_up-btns{
+  display: flex;
+  gap: 3rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.sign_up-btn{
+  width: 371px;
+  height: 56px;
+  background-color: var(--colo-primary);
+  font-size: var(--small-font-size);
+  padding: 10px;
+  color: white;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin-right: 2rem;
+}
+
+.sign_up-btn:hover{
+  opacity: .5;  
+}
+
+.have_acc-btn{
+  width: 141px;
+    height: 24px;
+    color: var(--colo-primary);
+    font-size: var(--smaller-font-size);
+    font-weight: 400;
+    text-align: center; 
+    margin-top: 1rem; 
+}
+
+.have_acc-btn:hover{
+  opacity: .5;  
+}
+
+.btns-form{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  margin-top: 1rem;
+  margin-left: 5rem;
+}
+
+.have-acc{
+  display: flex;
+  width: 400px;
+    font-size: var(--tiney-font-size);
+    font-weight: 400;
+
+    
+}
+
+.have-acc p{
+  margin-right: 5px;
+  margin-top: 14px;
+}
+
+.have-acc a{
+  text-decoration: none;
+
+}

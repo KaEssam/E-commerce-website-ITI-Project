@@ -129,6 +129,9 @@ hr {
 
 /*=============== HEADER & NAV ===============*/
 
+body{
+  overflow-x: hidden; 
+}
 
 /* header__top */
 
@@ -576,13 +579,17 @@ color: var(--colo-dark-1);
 }
 
 .image-content .item-btn{
-  position: relative;
+  position: absolute;
   padding: .5rem 1rem;
   background-color: var(--colo-dark-1);
   cursor: pointer;
-  display: none;
+  bottom: -100%;
+  width: 100%;
 }
 
+.prodact__item:hover .item-btn {
+  bottom: 0px;
+}
 
 
 .item-btn a{

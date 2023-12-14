@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FLATICON ===============-->
+    <link rel="stylesheet" href="" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="/assets/css/all products.css" />
+
+    <title>Ecommerce wishlist</title>
+  </head>
+  <body>
+    <!--=============== HEADER ===============-->
+    <special-header></special-header>
+
+    <!--=============== MAIN ===============-->
+
+    <div class="categories__section">
+      <div class="categories__info">
+        <h2>Explore Our Products</h2>
+      </div>
+    </div>
+    <div class="all-products">
+      <div class="products-container">
+        <div class="prodacts__items">
+          <div class="items__wrapper">
+            <div id="products-items" class="all-products"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--=============== FOOTER ===============-->
+    <special-footer></special-footer>
+
+    <!--=============== MAIN JS ===============-->
+    <!-- <script src="/assets/js/main.js"></script> -->
+    <script type="module" src="assets/js/test.js"></script>
+    <script type="module" src="/assets/js/header-footer.js"></script>
+    <script type="module">
+      import { products, addProductItemToGrid } from "/assets/js/test.js";
+
+      for (const product of products) {
+        addProductItemToGrid(product, "products-items");
+      }
+    </script>
+  </body>
+</html>
