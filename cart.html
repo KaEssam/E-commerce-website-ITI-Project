@@ -4,40 +4,129 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!--=============== FLATICON ===============-->
-    <link rel="stylesheet" href="" />
-
-    <!--=============== SWIPER CSS ===============-->
-    <link rel="stylesheet" href="" />
-
     <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="" />
+    <link rel="stylesheet" href="/assets/css/cart.css" />
 
     <title>Ecommerce Website</title>
   </head>
   <body>
     <!--=============== HEADER ===============-->
-    <header class="header"></header>
+    <special-header></special-header>
 
     <!--=============== MAIN ===============-->
     <main class="main">
-      <!--=============== BREADCRUMB ===============-->
-      <section class="breadcrumb"></section>
-
       <!--=============== CART ===============-->
-      <section class="cart"></section>
+      <section class="cart">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Example item row -->
+            <tr>
+              <td class="proudact-cart">
+                <img src="/assets/img/proudact/1.png" alt="Product Image" />
+                <span>Product Name</span>
+              </td>
+              <td>$XX.XX</td>
+              <td>
+                <input type="number" min="1" value="1" />
+              </td>
+              <td>$XX.XX</td>
+              <td>
+                <button class="remove-item">
+                  <a href=""
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-x-lg"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
+                      /></svg
+                  ></a>
+                </button>
+              </td>
+            </tr>
 
-      <!--=============== NEWSLETTER ===============-->
-      <section class="newsletter"></section>
+            <tr>
+              <td class="proudact-cart">
+                <img src="/assets/img/proudact/1.png" alt="Product Image" />
+                <span>Product Name</span>
+              </td>
+              <td>$XX.XX</td>
+              <td>
+                <input type="number" min="1" value="1" />
+              </td>
+              <td>$XX.XX</td>
+              <td>
+                <button class="remove-item">
+                  <a href=""
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-x-lg"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
+                      /></svg
+                  ></a>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Repeat this row structure for each item in the cart -->
+          </tbody>
+        </table>
+      </section>
+
+      <!--=============== ORDER SUMMARY ===============-->
+      <div class="order-summary">
+        <div class="cart-coupon">
+          <form action="">
+            <input type="text" placeholder="Coupon Code" />
+            <button>Apply Coupon</button>
+          </form>
+        </div>
+        <div class="cart-sum">
+          <h4>Cart Total</h4>
+          <ul>
+            <li>
+              <span class="li-title">Subtotal:</span>
+              <span>$XX.XX</span>
+            </li>
+            <li>
+              <span class="li-title">Shipping:</span>
+              <span>$XX.XX</span>
+            </li>
+            <li>
+              <span class="li-title">Total:</span>
+              <span class="total">$XX.XX</span>
+            </li>
+          </ul>
+          <button class="checkout">Procees to checkout</button>
+        </div>
+      </div>
     </main>
 
     <!--=============== FOOTER ===============-->
-    <footer class="footer"></footer>
-
-    <!--=============== SWIPER JS ===============-->
-    <script src=""></script>
+    <special-footer></special-footer>
 
     <!--=============== MAIN JS ===============-->
+    <script type="module" src="/assets/js/header-footer.js"></script>
+
     <script src=""></script>
   </body>
 </html>
