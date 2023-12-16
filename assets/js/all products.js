@@ -83,8 +83,9 @@ export function addProductItemToGrid(product, divID) {
                         alt=""
                       />
                       <div class="item_top_icons">
-                        <a href="#">
+                        <a href="#" onclick="addToWishlist()">
                           <svg
+                          
                             class="item_top_icon"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -127,7 +128,7 @@ export function addProductItemToGrid(product, divID) {
                         ></a>
                       </div>
                       <div class="item-btn">
-                        <a href="#" class="btn">Add to Cart</a>
+                        <a href="#" class="btn" onclick="addToCart()">Add to Cart</a>
                       </div>
                     </div>
                   </div>

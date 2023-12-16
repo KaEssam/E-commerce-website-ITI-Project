@@ -76,11 +76,13 @@ body {
   padding: 0 1rem;
 }
 
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: fixed;
+  
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -124,8 +126,6 @@ hr {
   margin: 2rem auto;
 }
 
-
-/*=============== REUSABLE CSS CLASSES ===============*/
 
 /*=============== HEADER & NAV ===============*/
 
@@ -288,6 +288,7 @@ nav{
   align-items: center;
 }
 
+
 .active-link,
 .nav__link:hover{
   color: var(--colo-primary);
@@ -392,101 +393,6 @@ color: var(--colo-dark-1);
   opacity: .8;
 }
 
-/*=============== BUTTONS ===============*/
-
-.section-today{
-  margin-top: 8rem;
-  margin-left: 8.4rem;
-  margin-bottom: 2rem;
-}
-
-.today__title h4{
-  font-size: var(--h4-font-size);
-  font-weight: var(--weight-600);
-  font-family: var(--body-font);
-  color: var(--colo-primary);
-  margin-bottom: 1rem;
-  margin-top: .4rem;
-}
-
-.today__title{
-    border-left: 1rem solid var(--colo-primary);
-    padding-left: .7rem;
-    height: 2rem;
-    display: flex;
-    border-radius:.4rem;
-    margin-bottom: 1.2rem;
-}
-
-
-.today__sales{
-  display: flex;
-  margin-bottom: 1.2rem;
-}
-
-.today__sales h2{
-  font-size: var(--h2-font-size);
-  font-weight: var(--weight-600);
-  font-family: var(--body-font);
-  color: var(--Title-Active);
-  margin-right: 5.4rem;
-}
-
-.sales__timer {
-  display: flex;
-  gap: 1rem;
-  margin-right: 45rem;
-}
-
-.timer__item {
-  text-align: center;
-  color: var(--colo-dark-1);
-  
-}
-
-.timer__item-number {
-  font-size: var(--h2-font-size);
-  font-weight: var(--weight-700);
-  font-family: var(--second-font);
-  color: var(--colo-dark-1);
-  margin-top: -.7rem;
-}
-
-.timer__item-text {
-  font-size: var(--tiny-font-size);
-  font-weight: var(--weight-400);
-  font-family: var(--body-font);
-  color: var(--colo-dark-1);
-  margin-top: -.2rem;
-}
-
-.styled-colon{
-  font-size: var(--h2-font-size);
-  font-weight: var(--weight-500);
-  font-family: var(--body-font);
-  color: var(--colo-primary);
-  padding: 0 1rem;
-}
-
-.prodact__sales-control{
-  display: flex;
-  margin-bottom: 1.2rem;
-}
-
-.prodact__sales-control .btn{
-  padding: .5rem .5rem;  
-  background-color: var(--Input-Background);
-  border-radius: 100%;
-  font-size: var(--small-font-size);
-  font-weight: var(--weight-600);
-  font-family: var(--body-font);  
-  margin-right: 1rem;
-}
-
-.prodact__sales-control .btn:hover{
-  opacity: .8;
-  background-color: var(--colo-primary);
-}
 
 /*=============== CATEGORIES ===============*/
 
@@ -795,11 +701,11 @@ color: var(--colo-dark-1);
   transition: all 0.2s var(--transition);
 }
 
-/*=============== PRODUCTS ===============*/
+
 
 /*=============== PRODUCT month ===============*/
 .categories__month {
-  margin-top: 4rem;
+  margin-top: 7rem;
   margin-left: 8.4rem;
   margin-bottom: 2rem;
 }
@@ -1270,3 +1176,5 @@ footer{
   align-items: center;
   justify-content: center;
 }
+
+

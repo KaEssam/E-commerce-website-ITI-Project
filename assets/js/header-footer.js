@@ -94,10 +94,8 @@ class Footer extends HTMLElement {
     `;
   }
 }
-
-/*=============== reusable header ===============*/
-
 customElements.define("special-footer", Footer);
+/*=============== reusable header ===============*/
 
 class Header extends HTMLElement {
   connectedCallback() {
@@ -150,14 +148,14 @@ class Header extends HTMLElement {
       </div>
 
       <div class="header__user-actions">
-        <a href="wishlist.html" class="header__action-btn">
+        <a href="wishlist.html" class="header__action-btn" onclick="addToWishlist()" id="wishlistBtn" >
           <img src="/assets/img/Wishlist.png" alt="" />
-          <span class="count">3</span>
+          <span class="count"></span>
         </a>
 
-        <a href="cart.html" class="header__action-btn">
+        <a href="cart.html" class="header__action-btn" id="cartBtn">
           <img src="/assets/img/Cart.png" alt="" />
-          <span class="count">3</span>
+          <span class="count"></span>
         </a>
         
 </div>
