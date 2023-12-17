@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
+
+      .form-container {
+        padding: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .form-container label {
+        width: 20%;
+        text-align: right;
+        box-sizing: border-box;
+        padding-right: 1rem;
+        flex-grow: 0;
+      }
+
+      .form-container input,
+      select,
+      textarea,
+      option {
+        width: 80%;
+        box-sizing: border-box;
+        padding: 8px;
+      }
+
+      .form-container input[type="file"] {
+        padding: 0px;
+      }
+
+      .form-container span {
+        width: 100%;
+        text-align: right;
+      }
+
+      .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        box-sizing: border-box;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+        display: flex;
+        justify-content: space-between;
+        margin: 8px 0px 0px;
+      }
+
+      .active,
+      .accordion:hover {
+        background-color: #db4444;
+        color: #eee;
+      }
+
+      .panel {
+        display: none;
+        padding: 0 18px;
+        background-color: #eee;
+        transition: max-height 0.2s ease-out;
+        margin: 0px 0px 8px;
+      }
+
+      .panel.show {
+        display: block !important;
+      }
+
+      .form-container button,
+      .form-container input[type="submit"] {
+        box-sizing: border-box;
+        padding: 0.5rem;
+        background-color: #db4444;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        width: 10%;
+      }
+
+      .form-container button:hover,
+      .form-container input[type="submit"]:hover {
+        background-color: #c23030;
+      }
+
+      .form-container button:active,
+      .form-container input[type="submit"]:active {
+        background-color: #a12424;
+      }
+
+      .form-container span {
+        margin-bottom: 16px;
+        color: red;
+        font-weight: bold;
+      }
+
+      .form-container span::before {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23f00' class='bi bi-x-circle-fill' viewBox='0 0 16 16'%3E%3Cpath d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z'/%3E%3C/svg%3E");
+        display: inline-block;
+        margin: 8px;
+      }
+
+      .form-container span:empty::before {
+        content: none;
+      }
+
+      select[readonly] option,
+      select[readonly] optgroup {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Add New Category</h2>
+    <form id="addNewCategoryForm" class="form-container" method="post">
+      <label for="nameInput">Name:</label>
+      <input type="text" name="name" id="nameInput" />
+      <span id="nameAlertSpan"></span>
+
+      <button type="submit" id="submitButton">Submit</button>
+    </form>
+
+    <h2>Manage Current Categories</h2>
+
+    <div id="categories-container"></div>
+
+    <script type="module" src="assets/scripts/firebase.js"></script>
+
+    <script type="module">
+      import {
+        addNewCategory,
+        getAllCategories,
+        UpdateExistingCategory,
+        deleteCategory,
+      } from "./assets/scripts/firebase.js";
+
+      window.addNewCategory = addNewCategory;
+
+      document
+        .getElementById("addNewCategoryForm")
+        .addEventListener("submit", async () => {
+          event.preventDefault();
+          await addNewCategory(
+            event,
+            document.getElementById("addNewCategoryForm")
+          );
+        });
+
+      var categories = await getAllCategories();
+
+      for (const category of categories) {
+        document.getElementById("categories-container").insertAdjacentHTML(
+          "beforeend",
+          `<div class="accordion">
+              <b>${category.name}</b>
+          </div>
+          <div class="panel">
+              <form id="${category.id}-form" method="post" class="form-container">
+                  <label for="${category.id}-name">Name:</label>
+                  <input type="text" name="name" id="${category.id}-name" value="${category.name}" readonly>
+                  <span id="${category.id}-nameAlertSpan"></span>
+
+                  <button type="button" id="${category.id}-update">Update</button>
+                  <button type="button" id="${category.id}-delete">Delete</button>
+              </form>
+          </div>`
+        );
+
+        document
+          .getElementById(`${category.id}-delete`)
+          .addEventListener("click", async () => {
+            await deleteCategory(category.id);
+          });
+
+        document
+          .getElementById(`${category.id}-update`)
+          .addEventListener("click", async () => {
+            const buttonText = document.getElementById(
+              `${category.id}-update`
+            ).innerText;
+            if (buttonText == "Update") {
+              document
+                .getElementById(`${category.id}-name`)
+                .removeAttribute("readonly");
+
+              document.getElementById(`${category.id}-update`).innerText =
+                "Save";
+            } else if (buttonText == "Save") {
+              document
+                .getElementById(`${category.id}-name`)
+                .setAttribute("readonly", "readonly");
+
+              const skipFlag = await UpdateExistingCategory(
+                event,
+                document.getElementById(`${category.id}-form`),
+                category.id
+              );
+
+              if (skipFlag == "skip changing button text") {
+                document.getElementById(`${category.id}-update`).innerText =
+                  "Update";
+                document.getElementById(`${category.id}-update`).click();
+              }
+            }
+          });
+      }
+
+      var acc = document.getElementsByClassName("accordion");
+      var panel = document.getElementsByClassName("panel");
+
+      for (var i = 0; i < acc.length; i++) {
+        acc[i].onclick = function () {
+          var setClasses = !this.classList.contains("active");
+          setClass(acc, "active", "remove");
+          setClass(panel, "show", "remove");
+
+          if (setClasses) {
+            this.classList.toggle("active");
+            this.nextElementSibling.classList.toggle("show");
+          }
+        };
+      }
+
+      function setClass(els, className, fnName) {
+        for (var i = 0; i < els.length; i++) {
+          els[i].classList[fnName](className);
+        }
+      }
+    </script>
+  </body>
+</html>
