@@ -38,17 +38,29 @@
 
     <!--=============== MAIN JS ===============-->
     <script src="/assets/js/main.js"></script>
-    <script type="module" src="assets/js/all products.js"></script>
 
     <script type="module" src="/assets/js/header-footer.js"></script>
-    <script type="module">
-      import {
-        products,
-        addProductItemToGrid,
-      } from "/assets/js/all products.js";
 
-      for (const product of products) {
-        addProductItemToGrid(product, "products-items");
+    <script type="module">
+      import { addProductItemToGrid } from "/assets/js/all products.js";
+      import {
+        getProductsByCategory,
+        getAllProducts,
+      } from "./assets/js/firebase.js";
+
+      if (window.location.href.includes("cid")) {
+        var url = new URL(window.location.href);
+        var cid = url.searchParams.get("cid");
+        const categoryProducts = await getProductsByCategory(cid);
+        console.log(categoryProducts);
+        for (const product of categoryProducts) {
+          addProductItemToGrid(product, "products-items");
+        }
+      } else {
+        const allProducts = await getAllProducts(c);
+        for (const product of allProducts) {
+          addProductItemToGrid(product, "products-items");
+        }
       }
     </script>
   </body>

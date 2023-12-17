@@ -129,7 +129,7 @@
     <h2>Add New Product</h2>
     <form
       id="addNewProductForm"
-      onsubmit="addNewProduct(event, this)"
+      onsubmit="event.preventDefault(); addNewProduct(event, this)"
       class="form-container"
       method="post"
     >

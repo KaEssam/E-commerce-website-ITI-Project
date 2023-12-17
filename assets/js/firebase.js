@@ -104,6 +104,7 @@ function validatePassword(passwordInput, passwordAlertSpan) {
 }
 
 function validateProduct(product, formElement, newOrUpdate, pid = 0) {
+  debugger;
   var errors = []; // Array to store validation errors
   var nameAlertSpan;
   var descriptionAlertSpan;
@@ -320,7 +321,9 @@ function validateProduct(product, formElement, newOrUpdate, pid = 0) {
     }
   } else {
     numberOfRatingsAlertSpan.innerText = "";
-    formElement[`${pid}-numberOfRatings`].style.border = "1px solid #333";
+    if (newOrUpdate == "update") {
+      formElement[`${pid}-numberOfRatings`].style.border = "1px solid #333";
+    }
   }
 
   return errors;
@@ -549,6 +552,7 @@ export async function addNewProduct(event, formElement) {
 
   alert("Product Has Been Added Successfully!");
   formElement.reset();
+  window.location.reload();
 }
 
 export async function getAllProducts() {
@@ -565,6 +569,15 @@ export async function getProductById(pid) {
   } else {
     return [];
   }
+}
+
+export async function getProductsByCategory(cid) {
+  const querySnapshot = await getDocs(
+    collection(db, "products"),
+    where("category", "==", doc(db, "categories", `${cid}`))
+  );
+
+  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
 export async function UpdateExistingProduct(event, formElement, pid) {
