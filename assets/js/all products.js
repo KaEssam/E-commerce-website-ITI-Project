@@ -1,7 +1,8 @@
 export const products = [
   {
     imagePath: "/assets/img/items/item-1.png",
-    productName: "HAVIT HV-G92 Gamepad",
+    productName:
+      "HAVIT HV-G92 Gamepad GamepadGamepadGamepadGamepadGamepadGamepadGamepadGamepadGamepadGamepadGamepadGamepad",
     productPrice: "$50.00",
   },
   {
