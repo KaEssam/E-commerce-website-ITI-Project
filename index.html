@@ -340,26 +340,13 @@
     <script src="/assets/js/main.js"></script>
 
     <script type="module" src="/assets/js/header-footer.js"></script>
+
     <script type="module">
       import {
-        products,
-        addProductItemToGrid,
-      } from "/assets/js/all products.js";
-
-      for (let i = 0; i < 10; i++) {
-        // Use for of if you want to load all products
-        let randomProduct = Math.floor(Math.random() * products.length);
-        addProductItemToGrid(products[i], "all-products");
-      }
-
-      for (let i = 0; i < 5; i++) {
-        // Use for of if you want to load all products
-        let randomProduct = Math.floor(Math.random() * products.length);
-        addProductItemToGrid(products[i], "month-items");
-      }
-    </script>
-    <script type="module">
-      import { getAllCategories } from "./assets/js/firebase.js";
+        getAllProducts,
+        getAllCategories,
+      } from "./assets/js/firebase.js";
+      import { addProductItemToGrid } from "/assets/js/all products.js";
 
       const mainFilterListCategories = await getAllCategories();
 
@@ -370,6 +357,20 @@
               <a href="all products.html?cid=${category.id}" class="filter__list-link">${category.name}</a>
             </li>`
         );
+      }
+
+      const products = await getAllProducts();
+
+      for (let i = 0; i < 10; i++) {
+        // Use for of if you want to load all products
+        let randomProduct = Math.floor(Math.random() * products.length);
+        addProductItemToGrid(products[randomProduct], "all-products");
+      }
+
+      for (let i = 0; i < 5; i++) {
+        // Use for of if you want to load all products
+        let randomProduct = Math.floor(Math.random() * products.length);
+        addProductItemToGrid(products[randomProduct], "month-items");
       }
     </script>
   </body>
