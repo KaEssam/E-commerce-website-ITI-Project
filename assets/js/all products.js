@@ -1,3 +1,5 @@
+import { addToCart } from "./main.js";
+
 export const products = [
   {
     imagePath: "/assets/img/items/item-1.png",
@@ -68,9 +70,6 @@ export function addProductItemToGrid(product, divID) {
   // Get the existing container by ID
   const existingContainer = document.getElementById(divID);
 
-  // Extract relevant information from the product
-  const { imagePath, productName, productPrice } = product;
-
   // Create a template literal for the HTML structure
   existingContainer.innerHTML += `
               <div class="cart__item">
@@ -79,7 +78,7 @@ export function addProductItemToGrid(product, divID) {
                     <span class="overlay"></span>
                     <div class="item-image">
                       <img
-                        src="${imagePath}"
+                        src="${product.thumbnail}"
                         class="item-img"
                         alt=""
                       />
@@ -103,7 +102,7 @@ export function addProductItemToGrid(product, divID) {
                             />
                           </svg>
                         </a>
-                        <a href="#"
+                        <a href="details.html?pid=${product.id}"
                           ><svg
                             class="item_top_icon"
                             xmlns="http://www.w3.org/2000/svg"
@@ -129,15 +128,15 @@ export function addProductItemToGrid(product, divID) {
                         ></a>
                       </div>
                       <div class="item-btn">
-                        <a href="#" class="btn" onclick="addToCart()">Add to Cart</a>
+                        <a href="#" class="btn" onclick="debugger;addToCart(event, '${product.id}'">Add to Cart</a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="prodact-info">
-                  <h4 class="prodact-title">${productName}</h4>
+                  <h4 class="prodact-title">${product.name}</h4>
                   <div class="prodact-price">
-                    <span class="prodact-price-new">${productPrice}</span>
+                    <span class="prodact-price-new">${product.price}</span>
 
                     <div class="prodact-rate">
                       <div class="rate">
@@ -168,7 +167,7 @@ export function addProductItemToGrid(product, divID) {
                             alt=""
                           />
                         </div>
-                        <div class="rate__reviews">(20)</div>
+                        <div class="rate__reviews">${product.numberOfRatings}</div>
                       </div>
                     </div>
                   </div>

@@ -31,43 +31,7 @@
       <!--=============== FILTER ===============-->
       <div class="main-filter">
         <div class="main__container">
-          <ul class="main__filter-list">
-            <li>
-              <a href="#" class="filter__list-link">Woman's Fashion</a>
-            </li>
-
-            <li>
-              <a href="#" class="filter__list-link">Man's Fashion</a>
-            </li>
-
-            <li>
-              <a href="#" class="filter__list-link">Electronics</a>
-            </li>
-
-            <li>
-              <a href="#" class="filter__list-link">Phones</a>
-            </li>
-
-            <li>
-              <a href="#" class="filter__list-link">Computers</a>
-            </li>
-
-            <li>
-              <a href="#" class="filter__list-link">SmartWatch</a>
-            </li>
-
-            <li>
-              <a href="#" class="filter__list-link">Camera</a>
-            </li>
-
-            <li>
-              <a href="#" class="filter__list-link">HeadPhones</a>
-            </li>
-
-            <li>
-              <a href="#" class="filter__list-link">Gaming</a>
-            </li>
-          </ul>
+          <ul id="main__filter-list" class="main__filter-list"></ul>
         </div>
 
         <div class="slider">
@@ -88,7 +52,9 @@
                           >
                         </h2>
                         <button class="btn">
-                          <a href="#" class="text-btn">Shop Now</a>
+                          <a href="all products.html" class="text-btn"
+                            >Shop Now</a
+                          >
                         </button>
                       </div>
                     </div>
@@ -374,22 +340,37 @@
     <script src="/assets/js/main.js"></script>
 
     <script type="module" src="/assets/js/header-footer.js"></script>
+
     <script type="module">
       import {
-        products,
-        addProductItemToGrid,
-      } from "/assets/js/all products.js";
+        getAllProducts,
+        getAllCategories,
+      } from "./assets/js/firebase.js";
+      import { addProductItemToGrid } from "/assets/js/all products.js";
+
+      const mainFilterListCategories = await getAllCategories();
+
+      for (const category of mainFilterListCategories) {
+        document.getElementById("main__filter-list").insertAdjacentHTML(
+          "beforeend",
+          `<li>
+              <a href="all products.html?cid=${category.id}" class="filter__list-link">${category.name}</a>
+            </li>`
+        );
+      }
+
+      const products = await getAllProducts();
 
       for (let i = 0; i < 10; i++) {
         // Use for of if you want to load all products
         let randomProduct = Math.floor(Math.random() * products.length);
-        addProductItemToGrid(products[i], "all-products");
+        addProductItemToGrid(products[randomProduct], "all-products");
       }
 
       for (let i = 0; i < 5; i++) {
         // Use for of if you want to load all products
         let randomProduct = Math.floor(Math.random() * products.length);
-        addProductItemToGrid(products[i], "month-items");
+        addProductItemToGrid(products[randomProduct], "month-items");
       }
     </script>
   </body>

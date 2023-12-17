@@ -179,12 +179,12 @@ function getCookie(name) {
 }
 
 // Function to handle the "Add to Cart" button click
-function addToCart() {
+export function addToCart(event, pid, quantity = 1) {
   event.preventDefault(); // Prevent the default behavior
-  var cartClicks = getCookie("cartClicks") || 0;
-  cartClicks++;
-  setCookie("cartClicks", cartClicks, 30); // Store for 30 days, adjust as needed
-  updateCount("cartBtn", cartClicks);
+  var cart = getCookie("cart") || [];
+  cart.push({ id: pid, quantity: quantity });
+  setCookie("cart", cart, 30); // Store for 30 days, adjust as needed
+  updateCount("cartBtn", cart.length);
 }
 
 // Function to handle the "Add to Wishlist" button click
