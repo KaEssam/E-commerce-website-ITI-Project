@@ -377,23 +377,24 @@ async function validateCategory(category, formElement, newOrUpdate, cid = 0) {
 //#region Authentication
 
 export async function signUpNewUser(event, formElement) {
-  const emailInput = formElement.getElementById("emailInput");
-  const passwordInput = formElement.getElementById("passwordInput");
-  const emailAlertSpan = formElement.getElementById("emailAlertSpan");
-  const passwordAlertSpan = formElement.getElementById("passwordAlertSpan");
+  debugger;
+  const emailInput = formElement["emailInput"];
+  const passwordInput = formElement["passwordInput"];
+  const emailAlertSpan = document.getElementById("emailAlertSpan");
+  const passwordAlertSpan = document.getElementById("passwordAlertSpan");
 
-  if (!validateEmail(emailInput, emailAlertSpan)) {
+  if (!validateEmail(emailInput)) {
     event.preventDefault();
     return;
   }
 
-  if (!validatePassword(passwordInput, passwordAlertSpan)) {
+  if (!validatePassword(passwordInput)) {
     event.preventDefault();
     return;
   }
 
-  const email = formElement.getElementById("emailInput").value.trim();
-  const password = formElement.getElementById("passwordInput").value.trim();
+  const email = formElement["emailInput"].value.trim();
+  const password = formElement["passwordInput"].value.trim();
 
   await createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
