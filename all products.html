@@ -46,14 +46,22 @@
       import {
         getProductsByCategory,
         getAllProducts,
+        getCategoryNameByCategoryId,
       } from "./assets/js/firebase.js";
 
       if (window.location.href.includes("cid")) {
         var url = new URL(window.location.href);
         var cid = url.searchParams.get("cid");
-        const categoryProducts = await getProductsByCategory(cid);
-        console.log(categoryProducts);
-        for (const product of categoryProducts) {
+
+        var allProducts = await getAllProducts();
+        console.log(allProducts[0]);
+
+        const filteredProducts = allProducts.filter(
+          (product) => product.category.id == cid
+        );
+
+        console.log(filteredProducts);
+        for (const product of filteredProducts) {
           addProductItemToGrid(product, "products-items");
         }
       } else {

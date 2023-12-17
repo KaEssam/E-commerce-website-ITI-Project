@@ -24,19 +24,36 @@
         <div class="login-box">
           <h2>Log in to Exclusive</h2>
           <p>Log in to your account to continue.</p>
-          <form id="myForm" onsubmit="return validateForm()">
+          <form id="myForm" method="post">
             <div class="user-box">
-              <input type="email" name="" placeholder="Email" required />
-              <span id="emailError" class="error"></span>
+              <input
+                id="emailInput"
+                type="email"
+                name="email"
+                placeholder="Email"
+                required
+              />
+              <span id="emailAlertSpan" class="error"></span>
             </div>
 
             <div class="user-box">
-              <input type="password" name="" placeholder="Password" required />
-              <span id="emailError" class="error"></span>
+              <input
+                id="passwordInput"
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+              />
+              <span id="passwordAlertSpan" class="error"></span>
             </div>
 
             <div class="login-btns">
-              <button type="submit" class="login-btn" value="Log in">
+              <button
+                id="loginButton"
+                type="submit"
+                class="login-btn"
+                value="Log in"
+              >
                 Log in
               </button>
 
@@ -52,5 +69,14 @@
     <!--=============== MAIN JS ===============-->
     <script src="/assets/js/main.js"></script>
     <script type="module" src="/assets/js/header-footer.js"></script>
+    <script type="module">
+      import { signInExistingUser } from "./assets/js/firebase.js";
+      window.signInExistingUser = signInExistingUser;
+
+      document.getElementById("myForm").addEventListener("submit", async () => {
+        debugger;
+        await signInExistingUser(event, document.getElementById("myForm"));
+      });
+    </script>
   </body>
 </html>

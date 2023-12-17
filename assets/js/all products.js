@@ -1,3 +1,5 @@
+import { addToCart } from "./main.js";
+
 export const products = [
   {
     imagePath: "/assets/img/items/item-1.png",
@@ -125,7 +127,7 @@ export function addProductItemToGrid(product, divID) {
                         ></a>
                       </div>
                       <div class="item-btn">
-                        <a href="#" class="btn" onclick="addToCart()">Add to Cart</a>
+                        <a href="#" class="btn" onclick="debugger;addToCart(event, '${product.id}'">Add to Cart</a>
                       </div>
                     </div>
                   </div>

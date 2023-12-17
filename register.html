@@ -25,7 +25,7 @@
           <h2>Create an account</h2>
           <p>Enter your details below.</p>
 
-          <form id="sign-up" onsubmit="return validateForm()">
+          <form id="sign-up">
             <div class="user-box">
               <input type="text" name="" placeholder="Name" required />
               <span id="nameError" class="error"></span>
@@ -67,5 +67,14 @@
     <!--=============== MAIN JS ===============-->
     <script src="/assets/js/main.js"></script>
     <script type="module" src="/assets/js/header-footer.js"></script>
+    <script type="module">
+      import { signUpNewUser } from "./assets/js/firebase.js";
+      window.signUpNewUser = signUpNewUser;
+
+      document.getElementById("myForm").addEventListener("submit", async () => {
+        debugger;
+        await signUpNewUser(event, document.getElementById("myForm"));
+      });
+    </script>
   </body>
 </html>
