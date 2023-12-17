@@ -25,26 +25,39 @@
           <h2>Create an account</h2>
           <p>Enter your details below.</p>
 
-          <form id="sign-up">
+          <form id="sign-up" method="post">
             <div class="user-box">
-              <input type="text" name="" placeholder="Name" required />
+              <input
+                id="nameInput"
+                type="text"
+                name=""
+                placeholder="Name"
+                required
+              />
               <span id="nameError" class="error"></span>
 
               <div class="user-box">
-                <input type="email" name="" placeholder="Email" required />
+                <input
+                  id="emailInput"
+                  type="email"
+                  name=""
+                  placeholder="Email"
+                  required
+                />
               </div>
-              <span id="emailError" class="error"></span>
+              <span id="emailAlertSpan" class="error"></span>
 
               <div class="user-box">
                 <input
+                  id="passwordInput"
                   type="password"
-                  name=""
+                  name="password"
                   placeholder="Password"
                   required
                 />
               </div>
 
-              <span id="passwordError" class="error"></span>
+              <span id="passwordAlertSpan" class="error"></span>
               <div class="btns-form">
                 <div class="sign_up-btns">
                   <button type="submit" class="sign_up-btn" value="Log in">
@@ -71,10 +84,12 @@
       import { signUpNewUser } from "./assets/js/firebase.js";
       window.signUpNewUser = signUpNewUser;
 
-      document.getElementById("myForm").addEventListener("submit", async () => {
-        debugger;
-        await signUpNewUser(event, document.getElementById("myForm"));
-      });
+      document
+        .getElementById("sign-up")
+        .addEventListener("submit", async () => {
+          debugger;
+          await signUpNewUser(event, document.getElementById("sign-up"));
+        });
     </script>
   </body>
 </html>
