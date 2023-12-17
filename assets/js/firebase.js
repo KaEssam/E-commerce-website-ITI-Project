@@ -1,23 +1,47 @@
-// Link: https://firebase.google.com/docs/web/learn-more?authuser=0#libraries-cdn
-import * as firebase_app from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import * as firebase_auth from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import * as firebase_firestore from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import * as firebase_storage from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+"use strict";
 
-Object.assign(globalThis, firebase_app);
-Object.assign(globalThis, firebase_auth);
-Object.assign(globalThis, firebase_firestore);
-Object.assign(globalThis, firebase_storage);
+//#region Imports
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  addDoc,
+  setDoc,
+  collection,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+  query,
+  where,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+//#endregion
+
+//#region App Configuration & Initialization
 
 // Firebase project configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyAu1K5vkzW6gPU_q_RTjWtghmnwTF7Gccg",
-    authDomain: "test-project-29227.firebaseapp.com",
-    projectId: "test-project-29227",
-    storageBucket: "test-project-29227.appspot.com",
-    messagingSenderId: "157526435183",
-    appId: "1:157526435183:web:5abef3e6169e9857be349a",
-    measurementId: "G-VJ9RHL35J6",
+  apiKey: "AIzaSyAu1K5vkzW6gPU_q_RTjWtghmnwTF7Gccg",
+  authDomain: "test-project-29227.firebaseapp.com",
+  projectId: "test-project-29227",
+  storageBucket: "test-project-29227.appspot.com",
+  messagingSenderId: "157526435183",
+  appId: "1:157526435183:web:5abef3e6169e9857be349a",
+  measurementId: "G-VJ9RHL35J6",
 };
 
 // Initialize Firebase
@@ -26,306 +50,683 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Add functions to global window
-window.createNewProduct = createNewProduct;
-window.getAllProducts = getAllProducts;
-window.getProductByID = getProductByID;
-window.getAllCategories = getAllCategories;
-window.loadCategoriesIntoSelectInput = loadCategoriesIntoSelectInput;
+//#endregion
 
-/**
- * 
- * Input Validation
- * 
- */
+//#region Input Validation
 
-function validateProductName(inputElement) {
+function validateEmail(emailInput, emailAlertSpan) {
+  const email = emailInput.value.trim();
 
+  const emailRegex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z-]+.)+[a-zA-Z]{2,}))$/;
+
+  if (!email) {
+    emailAlertSpan.innerText = "Please enter your email address.";
+    return false;
+  } else if (!emailRegex.test(email)) {
+    emailAlertSpan.innerText = "Please enter a valid email address.";
+    return false;
+  }
+
+  emailAlertSpan.innerText = "";
+  return true;
 }
 
-function validateProductDescription(inputElement) {
+function validatePassword(passwordInput, passwordAlertSpan) {
+  const password = passwordInput.value.trim();
 
+  const minLength = 8;
+  const maxLength = 16;
+  const hasUpperCase = /[A-Z]/g.test(password);
+  const hasLowerCase = /[a-z]/g.test(password);
+  const hasNumber = /[0-9]/g.test(password);
+  const hasSpecialChar = /[!@#$%^&*()_+=-{}[\]|\\:;'<>,./?~]/g.test(password);
+
+  if (!password) {
+    passwordAlertSpan.innerText = "Please enter your password.";
+    return false;
+  } else if (password.length < minLength) {
+    passwordAlertSpan.innerText =
+      "Password must be at least 8 characters long.";
+    return false;
+  } else if (password.length > maxLength) {
+    passwordAlertSpan.innerText =
+      "Password must be no longer than 16 characters.";
+    return false;
+  } else if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+    passwordAlertSpan.innerText =
+      "Password must include uppercase, lowercase, number, and special character.";
+    return false;
+  }
+
+  passwordAlertSpan.innerText = "";
+  return true;
 }
 
-// function validateProductDescription(inputElement) {
+function validateProduct(product, formElement, newOrUpdate, pid = 0) {
+  var errors = []; // Array to store validation errors
+  var nameAlertSpan;
+  var descriptionAlertSpan;
+  var categoryAlertSpan;
+  var priceAlertSpan;
+  var quantityAlertSpan;
+  var ratingAlertSpan;
+  var numberOfRatingsAlertSpan;
+  var thumbnailAlertSpan;
+  var imagesAlertSpan;
 
-// }
+  if (newOrUpdate == "new") {
+    nameAlertSpan = document.getElementById("nameAlertSpan");
+    descriptionAlertSpan = document.getElementById("descriptionAlertSpan");
+    categoryAlertSpan = document.getElementById("categoryAlertSpan");
+    priceAlertSpan = document.getElementById("priceAlertSpan");
+    quantityAlertSpan = document.getElementById("quantityAlertSpan");
+    ratingAlertSpan = document.getElementById("ratingAlertSpan");
+    numberOfRatingsAlertSpan = document.getElementById(
+      "numberOfRatingsAlertSpan"
+    );
+    thumbnailAlertSpan = document.getElementById("thumbnailAlertSpan");
+    imagesAlertSpan = document.getElementById("imagesAlertSpan");
+  } else if (newOrUpdate == "update") {
+    nameAlertSpan = document.getElementById(`${pid}-nameAlertSpan`);
+    descriptionAlertSpan = document.getElementById(
+      `${pid}-descriptionAlertSpan`
+    );
+    categoryAlertSpan = document.getElementById(`${pid}-categoryAlertSpan`);
+    priceAlertSpan = document.getElementById(`${pid}-priceAlertSpan`);
+    quantityAlertSpan = document.getElementById(`${pid}-quantityAlertSpan`);
+    ratingAlertSpan = document.getElementById(`${pid}-ratingAlertSpan`);
+    numberOfRatingsAlertSpan = document.getElementById(
+      `${pid}-numberOfRatingsAlertSpan`
+    );
+  }
 
-/**
- * 
- * Auth
- * 
- */
+  // Check name
+  if (!product.name) {
+    errors.push("Name is required.");
+    nameAlertSpan.innerText = "Please enter a product name.";
+    if (newOrUpdate == "new") {
+      formElement["nameInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${pid}-name`].style.border = "1px solid red";
+    }
+  } else {
+    nameAlertSpan.innerText = "";
+    if (newOrUpdate == "new") {
+      formElement["nameInput"].style.border = "1px solid #333";
+    } else {
+      formElement[`${pid}-name`].style.border = "1px solid #333";
+    }
+  }
 
-async function checkIfUserIsLoggedIn() {
-    await onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
-            const uid = user.uid;
-            alert("Signed in!")
-            // ...
+  // Check description
+  if (!product.description) {
+    errors.push("Description is required.");
+    descriptionAlertSpan.innerText =
+      "Please enter a description for the product.";
+    if (newOrUpdate == "new") {
+      formElement["descriptionInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${pid}-description`].style.border = "1px solid red";
+    }
+  } else {
+    descriptionAlertSpan.innerText = "";
+    if (newOrUpdate == "new") {
+      formElement["descriptionInput"].style.border = "1px solid #333";
+    } else {
+      formElement[`${pid}-description`].style.border = "1px solid #333";
+    }
+  }
+
+  // Check category
+  if (!product.category) {
+    errors.push("Category is required.");
+    categoryAlertSpan.innerText = "Please select a valid category.";
+    if (newOrUpdate == "new") {
+      formElement["categoryInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${pid}-category`].style.border = "1px solid red";
+    }
+  } else {
+    getCategoryById(product.category)
+      .then((category) => {
+        // If category doesn't exist, add error
+        if (!category) {
+          errors.push("Invalid category selected.");
+          categoryAlertSpan.innerText = "The selected category does not exist.";
+          if (newOrUpdate == "new") {
+            formElement["categoryInput"].style.border = "1px solid red";
+          } else {
+            formElement[`${pid}-category`].style.border = "1px solid red";
+          }
         } else {
-            // User is signed out
-            // ...
-            alert("Signed out!")
+          categoryAlertSpan.innerText = "";
+          if (newOrUpdate == "new") {
+            formElement["categoryInput"].style.border = "1px solid #333";
+          } else {
+            formElement[`${pid}-category`].style.border = "1px solid #333";
+          }
         }
+      })
+      .catch(() => {
+        errors.push("Error fetching category.");
+        categoryAlertSpan.innerText =
+          "An error occurred while verifying the category.";
+        if (newOrUpdate == "new") {
+          formElement["categoryInput"].style.border = "1px solid red";
+        } else {
+          formElement[`${pid}-category`].style.border = "1px solid red";
+        }
+      });
+  }
+
+  // Check price
+  if (!product.price) {
+    errors.push("Price must be a valid number.");
+    priceAlertSpan.innerText = "Please enter a valid price for the product.";
+    if (newOrUpdate == "new") {
+      formElement["priceInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${pid}-price`].style.border = "1px solid red";
+    }
+  } else if (product.price < 0) {
+    errors.push("Price cannot be negative.");
+    priceAlertSpan.innerText = "The product price cannot be less than zero.";
+    if (newOrUpdate == "new") {
+      formElement["priceInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${pid}-price`].style.border = "1px solid red";
+    }
+  } else {
+    priceAlertSpan.innerText = "";
+    if (newOrUpdate == "new") {
+      formElement["priceInput"].style.border = "1px solid #333";
+    } else {
+      formElement[`${pid}-price`].style.border = "1px solid #333";
+    }
+  }
+
+  // Check quantity
+  if (!product.quantity) {
+    errors.push("Quantity must be a valid number.");
+    quantityAlertSpan.innerText =
+      "Please enter a valid quantity for the product.";
+    if (newOrUpdate == "new") {
+      formElement["quantityInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${pid}-quantity`].style.border = "1px solid red";
+    }
+  } else if (product.quantity < 0) {
+    errors.push("Quantity cannot be negative.");
+    quantityAlertSpan.innerText =
+      "The product quantity cannot be less than zero.";
+    if (newOrUpdate == "new") {
+      formElement["quantityInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${pid}-quantity`].style.border = "1px solid red";
+    }
+  } else {
+    quantityAlertSpan.innerText = "";
+    if (newOrUpdate == "new") {
+      formElement["quantityInput"].style.border = "1px solid #333";
+    } else {
+      formElement[`${pid}-quantity`].style.border = "1px solid #333";
+    }
+  }
+
+  if (newOrUpdate == "new") {
+    // Check thumbnail
+    if (!product.thumbnail) {
+      errors.push("Thumbnail image is required.");
+      thumbnailAlertSpan.innerText =
+        "Please upload a thumbnail image for the product.";
+      formElement["thumbnailInput"].style.border = "1px solid red";
+    } else {
+      thumbnailAlertSpan.innerText = "";
+      formElement["thumbnailInput"].style.border = "none";
+    }
+
+    // Check images
+    if (!product.images || product.images.length !== 4) {
+      errors.push("4 images are required for product images.");
+      imagesAlertSpan.innerText = "Please upload 4 images for the product.";
+      formElement["imagesInput"].style.border = "1px solid red";
+    } else {
+      imagesAlertSpan.innerText = "";
+      formElement["imagesInput"].style.border = "none";
+    }
+  }
+
+  // Check rating and number of ratings
+  if (product.rating < 0 || product.rating > 5) {
+    errors.push("Rating must be between 0 and 5.");
+    ratingAlertSpan.innerText = "The product rating must be between 0 and 5.";
+    if (newOrUpdate == "update") {
+      formElement[`${pid}-rating`].style.border = "1px solid red";
+    }
+  } else {
+    ratingAlertSpan.innerText = "";
+    if (newOrUpdate == "update") {
+      formElement[`${pid}-rating`].style.border = "1px solid #333";
+    }
+  }
+
+  if (product.numberOfRatings < 0) {
+    errors.push("Number of ratings cannot be negative.");
+    numberOfRatingsAlertSpan.innerText =
+      "The number of ratings can't be less than 0.";
+    if (newOrUpdate == "update") {
+      formElement[`${pid}-numberOfRatings`].style.border = "1px solid red";
+    }
+  } else {
+    numberOfRatingsAlertSpan.innerText = "";
+    formElement[`${pid}-numberOfRatings`].style.border = "1px solid #333";
+  }
+
+  return errors;
+}
+
+async function validateCategory(category, formElement, newOrUpdate, cid = 0) {
+  var errors = []; // Array to store validation errors
+  var nameAlertSpan;
+
+  if (newOrUpdate == "new") {
+    nameAlertSpan = document.getElementById("nameAlertSpan");
+  } else if (newOrUpdate == "update") {
+    nameAlertSpan = document.getElementById(`${cid}-nameAlertSpan`);
+  }
+
+  const isDuplicate = await doesCategoryExist(category.name);
+
+  // Check name
+  if (!category.name) {
+    errors.push("Name is required.");
+    nameAlertSpan.innerText = "Please enter a category name.";
+    if (newOrUpdate == "new") {
+      formElement["nameInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${cid}-name`].style.border = "1px solid red";
+    }
+  } else if (isDuplicate) {
+    errors.push("Name must be unique.");
+    nameAlertSpan.innerText = "Please enter a unique category name.";
+    if (newOrUpdate == "new") {
+      formElement["nameInput"].style.border = "1px solid red";
+    } else {
+      formElement[`${cid}-name`].style.border = "1px solid red";
+    }
+  } else {
+    nameAlertSpan.innerText = "";
+    if (newOrUpdate == "new") {
+      formElement["nameInput"].style.border = "1px solid #333";
+    } else {
+      formElement[`${cid}-name`].style.border = "1px solid #333";
+    }
+  }
+
+  return errors;
+}
+
+//#endregion
+
+//#region Authentication
+
+async function signUpNewUser(event, formElement) {
+  const emailInput = formElement.getElementById("emailInput");
+  const passwordInput = formElement.getElementById("passwordInput");
+  const emailAlertSpan = formElement.getElementById("emailAlertSpan");
+  const passwordAlertSpan = formElement.getElementById("passwordAlertSpan");
+
+  if (!validateEmail(emailInput, emailAlertSpan)) {
+    event.preventDefault();
+    return;
+  }
+
+  if (!validatePassword(passwordInput, passwordAlertSpan)) {
+    event.preventDefault();
+    return;
+  }
+
+  const email = formElement.getElementById("emailInput").value.trim();
+  const password = formElement.getElementById("passwordInput").value.trim();
+
+  await createUserWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      window.location.replace("index.html");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(`${errorCode}: ${errorMessage}`);
     });
 }
 
-async function signUpNewUser() {
-    // Validation here!
+async function signInExistingUser(event, formElement) {
+  const emailInput = formElement.getElementById("emailInput");
+  const passwordInput = formElement.getElementById("passwordInput");
+  const emailAlertSpan = formElement.getElementById("emailAlertSpan");
+  const passwordAlertSpan = formElement.getElementById("passwordAlertSpan");
 
-    await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed up 
-            const user = userCredential.user;
-            // ...
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // ..
-        });
-}
+  if (!validateEmail(emailInput, emailAlertSpan)) {
+    event.preventDefault();
+    return;
+  }
 
-async function signInExistingUser(email, password) {
-    // Validation here!
+  if (!validatePassword(passwordInput, passwordAlertSpan)) {
+    event.preventDefault();
+    return;
+  }
 
-    await signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-            // ...
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-        });
+  const email = formElement.getElementById("emailInput").value.trim();
+  const password = formElement.getElementById("passwordInput").value.trim();
+
+  await signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      window.location.replace("index.html");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(`${errorCode}: ${errorMessage}`);
+    });
 }
 
 function signOut() {
-    auth.signOut();
+  auth.signOut();
 }
 
-/**
- * 
- * CRUD on products
- * 
- */
+async function checkIfUserIsLoggedIn() {
+  await onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
 
-export async function createNewProduct(e, formElement) {
-    e.preventDefault();
+      const docSnap = await getDoc(doc(db, "users", uid));
 
-    // extract values from form
-    var name = formElement.elements["name"].value;
-    var description = formElement.elements["description"].value;
-    var category = formElement.elements["category"].value;
-    var price = formElement.elements["price"].value;
-    var quantity = formElement.elements["quantity"].value;
-    var thumbnail = formElement.elements["thumbnail"].files[0];
-    var images = formElement.elements["images"].files;
-
-    // Validation here!
-
-    const docRef = await addDoc(collection(db, "products"), {
-        name: name,
-        description: description,
-        category: doc(db, "categories", category),
-        price: price,
-        quantity: quantity,
-        rating: 0,
-        numberOfRatings: 0
-    });
-
-    const thumbnailURL = await uploadFile(docRef.id, thumbnail, "thumbnail");
-    await setDoc(doc(db, "products", docRef.id), {
-        thumbnail: thumbnailURL
-    }, { merge: true });
-
-
-    var imagesArray = [];
-    for (let index = 0; index < Math.min(4, images.length); index++) {
-        const image = images[index];
-        const imageURL = await uploadFile(docRef.id, image, "image");
-        imagesArray.push(imageURL);
+      if (docSnap.exists()) {
+        alert("Signed in!");
+      } else {
+        alert("This page is for customers only!");
+        signOut();
+        window.location.replace("login.html");
+      }
+    } else {
+      alert("Signed out!");
     }
+  });
+}
 
-    await setDoc(doc(db, "products", docRef.id), {
-        images: imagesArray
-    }, { merge: true });
+async function checkIfAdminIsLoggedIn() {
+  await onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+
+      const docSnap = await getDoc(doc(db, "admins", uid));
+
+      if (docSnap.exists()) {
+        alert("Signed in!");
+      } else {
+        alert("This page is for admins only!");
+        signOut();
+        window.location.replace("login.html");
+      }
+    } else {
+      alert("Signed out!");
+    }
+  });
+}
+
+//#endregion
+
+//#region Products
+
+export async function addNewProduct(event, formElement) {
+  var product = {};
+  product.name = formElement.elements["nameInput"].value.trim();
+  product.description = formElement.elements["descriptionInput"].value.trim();
+  product.category = formElement.elements["categoryInput"].value;
+  product.price = parseInt(formElement.elements["priceInput"].value);
+  product.quantity = parseInt(formElement.elements["quantityInput"].value);
+  product.thumbnail = formElement.elements["thumbnailInput"].files[0];
+  product.images = formElement.elements["imagesInput"].files;
+
+  if (!formElement.elements["ratingInput"]) {
+    product.rating = 0;
+  } else {
+    product.rating = parseInt(formElement.elements["ratingInput"].value);
+  }
+
+  if (!formElement.elements["numberOfRatingsInput"]) {
+    product.numberOfRatings = 0;
+  } else {
+    product.numberOfRatings = parseInt(
+      formElement.elements["numberOfRatingsInput"].value
+    );
+  }
+
+  // If there are any errors, prevent submission and display them
+  const errors = validateProduct(product, formElement, "new");
+  if (errors.length > 0) {
+    event.preventDefault();
+    return;
+  }
+
+  const docRef = await addDoc(collection(db, "products"), {
+    name: product.name,
+    description: product.description,
+    category: doc(db, "categories", product.category),
+    price: product.price,
+    quantity: product.quantity,
+    rating: product.rating,
+    numberOfRatings: product.numberOfRatings,
+  });
+
+  const thumbnailURL = await uploadFile(
+    docRef.id,
+    product.thumbnail,
+    "thumbnail"
+  );
+  await setDoc(
+    doc(db, "products", docRef.id),
+    {
+      thumbnail: thumbnailURL,
+    },
+    { merge: true }
+  );
+
+  var imagesArray = [];
+  for (const image of product.images) {
+    const imageURL = await uploadFile(docRef.id, image, "image");
+    imagesArray.push(imageURL);
+  }
+
+  await setDoc(
+    doc(db, "products", docRef.id),
+    {
+      images: imagesArray,
+    },
+    { merge: true }
+  );
+
+  alert("Product Has Been Added Successfully!");
+  formElement.reset();
 }
 
 export async function getAllProducts() {
-    const querySnapshot = await getDocs(collection(db, "products"));
+  const querySnapshot = await getDocs(collection(db, "products"));
 
-    return querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
-export async function getProductByID(pid) {
-    const docRef = doc(db, "products", pid);
-    const docSnap = await getDoc(docRef);
+export async function getProductById(pid) {
+  const docSnap = await getDoc(doc(db, "products", pid));
 
-    if (docSnap.exists()) {
-        return docSnap.data();
-    } else {
-        return [];
-    }
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return [];
+  }
 }
 
-export async function UpdateExistingProduct(e, formElement, pid) {
-    e.preventDefault();
+export async function UpdateExistingProduct(event, formElement, pid) {
+  var product = {};
+  product.name = formElement.elements[`${pid}-name`].value.trim();
+  product.description = formElement.elements[`${pid}-description`].value.trim();
+  product.category = formElement.elements[`${pid}-category`].value;
+  product.price = parseInt(formElement.elements[`${pid}-price`].value);
+  product.quantity = parseInt(formElement.elements[`${pid}-quantity`].value);
+  product.rating = parseInt(formElement.elements[`${pid}-rating`].value);
+  product.numberOfRatings = parseInt(
+    formElement.elements[`${pid}-numberOfRatings`].value
+  );
 
-    var name = formElement.elements["name"].value;
-    var description = formElement.elements["description"].value;
-    var category = formElement.elements["category"].value;
-    var price = formElement.elements["price"].value;
-    var quantity = formElement.elements["quantity"].value;
-    var rating = formElement.elements["rating"].value;
-    var numberOfRatings = formElement.elements["numberOfRatings"].value;
+  // If there are any errors, prevent submission and display them
+  const errors = validateProduct(product, formElement, "update", pid);
+  if (errors.length > 0) {
+    event.preventDefault();
+    return "skip changing button text";
+  }
 
-    // Validation here!
+  await updateDoc(doc(db, "products", pid), {
+    name: product.name,
+    description: product.description,
+    category: doc(db, "categories", product.category),
+    price: product.price,
+    quantity: product.quantity,
+    rating: product.rating,
+    numberOfRatings: product.numberOfRatings,
+  });
 
-    await updateDoc(doc(db, "products", pid), {
-        name: name,
-        description: description,
-        category: category,
-        price: price,
-        quantity: quantity,
-        rating: rating,
-        numberOfRatings: numberOfRatings
-    });
+  window.location.reload();
 }
 
 export async function deleteProduct(pid) {
-    await deleteDoc(doc(db, "products", pid));
+  await deleteDoc(doc(db, "products", pid));
+  window.location.reload();
 }
 
-/**
- * 
- * CRUD on categories
- * 
- */
+//#endregion
 
-export async function createNewCategory(e, formElement) {
-    e.preventDefault();
+//#region Categories
 
-    // extract values from form
-    var name = formElement.elements["name"].value;
+export async function addNewCategory(event, formElement) {
+  var category = {};
+  category.name = formElement.elements["nameInput"].value.trim();
 
-    // Validation here!
-    // name.split(" ").join("_") ======> Check if there are spaces or non alphacahr in name
-    var nameAsID = name;
+  // If there are any errors, prevent submission and display them
+  const errors = await validateCategory(category, formElement, "new");
+  if (errors.length > 0) {
+    event.preventDefault();
+    return;
+  }
 
-    const docRef = await setDoc(doc(db, "categories", nameAsID), {
-        name: name
-    });
-    console.log("Document written with ID: ", docRef.id);
+  await addDoc(collection(db, "categories"), {
+    name: category.name,
+  });
+
+  alert("Category Has Been Added Successfully!");
+  formElement.reset();
+  window.location.reload();
 }
 
 export async function getAllCategories() {
-    const querySnapshot = await getDocs(collection(db, "categories"));
+  const querySnapshot = await getDocs(collection(db, "categories"));
 
-    return querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
-async function getCategoryByID(cid) {
-    // Validation here!
+export async function getCategoryById(cid) {
+  const docRef = doc(db, "categories", cid);
+  const docSnap = await getDoc(docRef);
 
-    const docRef = doc(db, "categories", cid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-        return docSnap.data();
-    } else {
-        return [];
-    }
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return [];
+  }
 }
 
-async function UpdateExistingCategory(cid, name) {
-    // Validation here!
+export async function UpdateExistingCategory(event, formElement, cid) {
+  var category = {};
+  category.name = formElement.elements[`${cid}-name`].value.trim();
 
-    const categoryRef = doc(db, "categories", cid);
+  // If there are any errors, prevent submission and display them
+  const errors = await validateCategory(category, formElement, "update", cid);
+  if (errors.length > 0) {
+    event.preventDefault();
+    return "skip changing button text";
+  }
 
-    // Set the "capital" field of the city 'DC'
-    await updateDoc(categoryRef, {
-        name: name
-    });
+  await updateDoc(doc(db, "categories", cid), {
+    name: category.name,
+  });
+
+  window.location.reload();
 }
 
-async function deleteCategory(cid) {
-    // Validation here!
-
-    await deleteDoc(doc(db, "categories", cid));
+export async function deleteCategory(cid) {
+  await deleteDoc(doc(db, "categories", cid));
+  window.location.reload();
 }
 
-/**
- * 
- * Order functions
- * 
- */
+//#endregion
 
-async function createNewOrder(itemsAndQuantities) {
+//#region Orders
+//#endregion
 
-    await onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
-            const uid = user.uid;
-            addOrderToDatabase(uid);
-            // ...
-        } else {
-            // User is signed out
-            // ...
-            alert("Signed out!")
-        }
-    });
+//#region Wishlist
+//#endregion
 
-}
+//#region Search
+//#endregion
 
-async function addOrderToDatabase(user_id) {
-    const docRef = await addDoc(collection(db, "users", user_id, "orders"), {
-        name: "test"
-    });
-}
-
-/**
- * 
- * Helper Functions
- * 
- */
+//#region Helper Functions
 
 export async function loadCategoriesIntoSelectInput(selectElement) {
-    var categories = await getAllCategories();
+  var categories = await getAllCategories();
 
-    for (let category of categories) {
+  for (let category of categories) {
+    let op = document.createElement("option");
+    op.value = category.id;
+    op.innerHTML = category.name;
 
-        let op = document.createElement("option");
-        op.value = category.id;
-        op.innerHTML = category.name;
-
-        if (category.id == "main") {
-            op.disabled = true;
-            selectElement.insertBefore(op, selectElement.firstChild);
-            continue;
-        }
-
-        selectElement.appendChild(op);
+    if (category.id == "main") {
+      op.disabled = true;
+      selectElement.insertBefore(op, selectElement.firstChild);
+      continue;
     }
+
+    selectElement.appendChild(op);
+  }
 }
 
 export async function uploadFile(pid, file, type) {
-    if (type == "thumbnail") {
-        var filePathAndName = `/images/${pid}/thumbnail/thumbnail-${pid}-${Date.now()}`;
-    } else if (type == "image") {
-        var filePathAndName = `/images/${pid}/images/image-${pid}-${Date.now()}`;
-    }
+  var filePathAndName;
+  if (type == "thumbnail") {
+    filePathAndName = `/images/${pid}/thumbnail/thumbnail-${pid}-${Date.now()}`;
+  } else if (type == "image") {
+    filePathAndName = `/images/${pid}/images/image-${pid}-${Date.now()}`;
+  }
 
-    const storageRef = ref(storage, filePathAndName);
+  const storageRef = ref(storage, filePathAndName);
 
-    const uploadTask = await uploadBytes(storageRef, file);
+  const uploadTask = await uploadBytes(storageRef, file);
 
-    const downloadURL = await getDownloadURL(uploadTask.ref);
+  const downloadURL = await getDownloadURL(uploadTask.ref);
 
-    return downloadURL;
+  return downloadURL;
 }
+
+async function doesCategoryExist(categoryName) {
+  const q = query(
+    collection(db, "categories"),
+    where("name", "==", categoryName)
+  );
+
+  // Get the matching documents (if any)
+  const snapshot = await getDocs(q);
+
+  // Return true if at least one document was found, false otherwise
+  return !snapshot.empty;
+}
+
+//#endregion
