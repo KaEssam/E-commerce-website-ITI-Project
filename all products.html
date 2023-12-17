@@ -65,7 +65,7 @@
           addProductItemToGrid(product, "products-items");
         }
       } else {
-        const allProducts = await getAllProducts(c);
+        const allProducts = await getAllProducts();
         for (const product of allProducts) {
           addProductItemToGrid(product, "products-items");
         }
