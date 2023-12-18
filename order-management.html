@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/assets/css/product-management.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <h1>Product Management System</h1>
+    </header>
+    <nav>
+      <a href="category-management.html">Category Management</a>
+      <a href="product-management.html">Product Management</a>
+    </nav>
+
+    <main>
+      <div
+        style="display: flex; justify-content: center"
+        class="product-container form-container"
+      >
+        <div id="manageProductsSection">
+          <h2>Manage Current Orders</h2>
+          <div id="products-container">
+            <!-- Manage Current Products content -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>&copy; 2023 Product Management System</footer>
+
+    <script type="module" src="assets/js/firebase.js"></script>
+
+    <script type="module">
+      import {
+        addNewProduct,
+        getAllOrders,
+        getProductById,
+        getProductNameById,
+        acceptOrder,
+        rejectOrder,
+      } from "./assets/js/firebase.js";
+
+      var orders = await getAllOrders();
+
+      const orderOfStatuses = ["pending", "accepted", "rejected"];
+
+      const allOrdersGroupedByStatus = orders.reduce((acc, obj) => {
+        const status = obj.status;
+        for (const desiredStatus of orderOfStatuses) {
+          if (status === desiredStatus) {
+            acc[desiredStatus] = [...(acc[desiredStatus] || []), obj];
+            break;
+          }
+        }
+        return acc;
+      }, {});
+
+      console.log(allOrdersGroupedByStatus);
+
+      for (const status in allOrdersGroupedByStatus) {
+        console.log(allOrdersGroupedByStatus["accepted"]);
+        document
+          .getElementById("products-container")
+          .insertAdjacentHTML("beforeend", `<h3>${status}</h3>`);
+
+        for (const order of allOrdersGroupedByStatus[status]) {
+          document.getElementById("products-container").insertAdjacentHTML(
+            "beforeend",
+            `<div class="accordion">
+            User: ${order.uid}
+        </div>
+        <div class="panel">
+            <form id="${order.id}-form" method="post" class="form-container">
+                <label for="${order.id}-name">Order Content:</label>
+                <textarea name="content" id="${order.id}-textarea" readonly></textarea>
+
+                <button type="button" id="${order.id}-accept">Accept</button>
+                <button type="button" id="${order.id}-reject">Reject</button>
+            </form>
+            <br><br>
+        </div>`
+          );
+
+          document.getElementById(`${order.id}-textarea`).innerHTML =
+            await returnOrderDataAsString(order);
+
+          textAreaAdjust(document.getElementById(`${order.id}-textarea`));
+
+          document
+            .getElementById(`${order.id}-accept`)
+            .addEventListener("click", async () => {
+              var cont = confirm("Do you want to accept?");
+              if (cont) {
+                await acceptOrder(order.uid, order.id);
+                window.location.reload();
+              }
+            });
+
+          document
+            .getElementById(`${order.id}-reject`)
+            .addEventListener("click", async () => {
+              var cont = confirm("Do you want to reject?");
+              if (cont) {
+                await rejectOrder(order.uid, order.id);
+                window.location.reload();
+              }
+            });
+        }
+      }
+
+      function textAreaAdjust(element) {
+        element.style.height = "1px";
+        element.style.height = 25 + element.scrollHeight + "px";
+      }
+
+      async function returnOrderDataAsString(order) {
+        var orderString = "";
+        // console.log(order.products);
+
+        for (var p in order.products) {
+          orderString +=
+            `Product Name: ` +
+            (await getProductNameById(order.products[p].id)) +
+            `
+Quantity: ` +
+            order.products[p].quantity +
+            `
+-------------------------
+`;
+        }
+
+        return orderString;
+      }
+    </script>
+    <script type="module">
+      import { checkIfAdminIsLoggedIn } from "./assets/js/firebase.js";
+
+      // await checkIfAdminIsLoggedIn();
+    </script>
+  </body>
+</html>

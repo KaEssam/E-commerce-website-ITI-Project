@@ -13,6 +13,7 @@
 
     <nav>
       <a href="product-management.html">Product Management</a>
+      <a href="order-management.html">Order Management</a>
       <span>|</span>
       <a href="#">Logout</a>
     </nav>
@@ -81,7 +82,10 @@
         document
           .getElementById(`${category.id}-delete`)
           .addEventListener("click", async () => {
-            await deleteCategory(category.id);
+            var cont = confirm("Do you want to delete?");
+            if (cont) {
+              await deleteCategory(category.id);
+            }
           });
 
         document

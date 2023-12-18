@@ -21,6 +21,7 @@ import {
   updateDoc,
   query,
   where,
+  collectionGroup,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import {
   getStorage,
@@ -396,15 +397,17 @@ export async function signUpNewUser(event, formElement) {
   const email = formElement["emailInput"].value.trim();
   const password = formElement["passwordInput"].value.trim();
 
-  await createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      window.location.replace("index.html");
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(`${errorCode}: ${errorMessage}`);
-    });
+  const docRef = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  ).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(`${errorCode}: ${errorMessage}`);
+  });
+  await addDoc(doc(db, "users", docRef.id), {});
+  window.location.replace("index.html");
 }
 
 export async function signInExistingUser(event, formElement) {
@@ -445,9 +448,7 @@ export function signOut() {
 export async function getCurrentUserId() {
   await onAuthStateChanged(auth, async (user) => {
     if (user) {
-      const uid = user.uid;
-
-      return uid;
+      return user.uid;
     }
   });
 }
@@ -569,6 +570,16 @@ export async function addNewProduct(event, formElement) {
   alert("Product Has Been Added Successfully!");
   formElement.reset();
   window.location.reload();
+}
+
+export async function getProductNameById(pid) {
+  const docSnap = await getDoc(doc(db, "products", pid));
+
+  if (docSnap.exists()) {
+    return docSnap.data().name;
+  } else {
+    return [];
+  }
 }
 
 export async function getAllProducts() {
@@ -711,6 +722,62 @@ export async function deleteCategory(cid) {
 //#endregion
 
 //#region Orders
+
+export async function addNewOrder(products) {
+  debugger;
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid;
+      const docRef = await addDoc(collection(db, "users", uid, "orders"), {
+        products: products,
+        status: "pending",
+      });
+    }
+  });
+}
+
+export async function rewriteProductQuantity(pid, newQuantity) {
+  await updateDoc(doc(db, "products", pid), {
+    quantity: newQuantity,
+  });
+}
+
+export async function getAllOrders() {
+  const orders = query(collectionGroup(db, "orders"));
+
+  const querySnapshot = await getDocs(orders);
+
+  var ordersWithUid = [];
+
+  querySnapshot.forEach((doc) => {
+    // console.log(doc.id, " => ", doc.data());
+    const orderData = doc.data(); // get order data
+
+    // add the user ID from the document path
+    orderData.uid = doc.ref.parent.parent.id;
+    orderData.id = doc.id;
+
+    // push the order with uid to the array
+    ordersWithUid.push(orderData);
+  });
+
+  return ordersWithUid;
+}
+
+export async function acceptOrder(uid, oid) {
+  await updateDoc(doc(db, "users", uid, "orders", oid), {
+    status: "accepted",
+  });
+}
+
+export async function rejectOrder(uid, oid) {
+  await updateDoc(doc(db, "users", uid, "orders", oid), {
+    status: "rejected",
+  });
+}
+
 //#endregion
 
 //#region Search

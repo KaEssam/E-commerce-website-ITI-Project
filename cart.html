@@ -55,7 +55,9 @@
               <span id="globalTotalCost" class="total"></span>
             </li>
           </ul>
-          <button class="checkout">Procees to checkout</button>
+          <button id="checkoutButton" class="checkout">
+            Procees to checkout
+          </button>
         </div>
       </div>
     </main>
@@ -67,8 +69,17 @@
     <script type="module" src="/assets/js/header-footer.js"></script>
 
     <script type="module">
-      import { setCookie, getCookie, updateCount } from "/assets/js/main.js";
-      import { getProductById } from "./assets/js/firebase.js";
+      import {
+        setCookie,
+        getCookie,
+        updateCount,
+        removeWishItem,
+      } from "/assets/js/main.js";
+      import {
+        getProductById,
+        addNewOrder,
+        rewriteProductQuantity,
+      } from "./assets/js/firebase.js";
 
       function deleteEntryById(data, id) {
         return data.filter((item) => item.id !== id);
@@ -163,6 +174,41 @@
       }
 
       document.addEventListener("DOMContentLoaded", updateAllSubTotals());
+
+      document
+        .getElementById("checkoutButton")
+        .addEventListener("click", async () => {
+          var products = [];
+          var cart = getCookie("cart");
+          if (cart.length == 0) {
+            alert("Cart is empty!");
+            return;
+          }
+
+          for (var elem of cart) {
+            elem.quantity = document.querySelector(
+              `#${elem.id}-quantityInput`
+            ).value;
+            products.push(elem);
+          }
+
+          await addNewOrder(products);
+
+          for (var elem of cart) {
+            debugger;
+            const newQuantity =
+              getProductMax(elem.id) -
+              document.querySelector(`#${elem.id}-quantityInput`).value;
+
+            await rewriteProductQuantity(elem.id, newQuantity);
+          }
+
+          for (var elem of cart) {
+            removeCartItem(elem.id);
+          }
+
+          window.location.replace("index.html");
+        });
     </script>
   </body>
 </html>

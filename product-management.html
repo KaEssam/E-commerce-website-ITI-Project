@@ -12,6 +12,7 @@
     </header>
     <nav>
       <a href="category-management.html">Category Management</a>
+      <a href="order-management.html">Order Management</a>
     </nav>
 
     <main>
@@ -162,7 +163,10 @@
           document
             .getElementById(`${product.id}-delete`)
             .addEventListener("click", async () => {
-              await deleteProduct(product.id);
+              var cont = confirm("Do you want to delete?");
+              if (cont) {
+                await deleteProduct(product.id);
+              }
             });
 
           document
