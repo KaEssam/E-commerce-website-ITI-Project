@@ -1,4 +1,4 @@
-import { addToCart } from "./main.js";
+import { addToCart, changeWishState } from "./main.js";
 
 export const products = [
   {
@@ -83,7 +83,7 @@ export function addProductItemToGrid(product, divID) {
                         alt=""
                       />
                       <div class="item_top_icons">
-                        <a href="#" onclick="addToWishlist()">
+                        <a href="" onclick="event.preventDefault(); changeWishState('${product.id}')">
                           <svg
                           
                             class="item_top_icon"
@@ -128,7 +128,7 @@ export function addProductItemToGrid(product, divID) {
                         ></a>
                       </div>
                       <div class="item-btn">
-                        <a href="#" class="btn" onclick="debugger;addToCart(event, '${product.id}'">Add to Cart</a>
+                        <a href="" class="btn" onclick="event.preventDefault(); addToCart('${product.id}')">Add to Cart</a>
                       </div>
                     </div>
                   </div>

@@ -442,6 +442,16 @@ export function signOut() {
   auth.signOut();
 }
 
+export async function getCurrentUserId() {
+  await onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+
+      return uid;
+    }
+  });
+}
+
 export async function checkIfUserIsLoggedIn() {
   await onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -701,9 +711,6 @@ export async function deleteCategory(cid) {
 //#endregion
 
 //#region Orders
-//#endregion
-
-//#region Wishlist
 //#endregion
 
 //#region Search

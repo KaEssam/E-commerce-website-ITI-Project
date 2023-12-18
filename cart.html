@@ -27,68 +27,7 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- Example item row -->
-            <tr>
-              <td class="proudact-cart">
-                <img src="/assets/img/proudact/1.png" alt="Product Image" />
-                <span>Product Name</span>
-              </td>
-              <td>$XX.XX</td>
-              <td>
-                <input type="number" min="1" value="1" />
-              </td>
-              <td>$XX.XX</td>
-              <td>
-                <button class="remove-item">
-                  <a href=""
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-x-lg"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
-                      /></svg
-                  ></a>
-                </button>
-              </td>
-            </tr>
-
-            <tr>
-              <td class="proudact-cart">
-                <img src="/assets/img/proudact/1.png" alt="Product Image" />
-                <span>Product Name</span>
-              </td>
-              <td>$XX.XX</td>
-              <td>
-                <input type="number" min="1" value="1" />
-              </td>
-              <td>$XX.XX</td>
-              <td>
-                <button class="remove-item">
-                  <a href=""
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-x-lg"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
-                      /></svg
-                  ></a>
-                </button>
-              </td>
-            </tr>
-
-            <!-- Repeat this row structure for each item in the cart -->
-          </tbody>
+          <tbody id="cartBody"></tbody>
         </table>
       </section>
 
@@ -105,15 +44,15 @@
           <ul>
             <li>
               <span class="li-title">Subtotal:</span>
-              <span>$XX.XX</span>
+              <span id="globalSubtotalCost"></span>
             </li>
             <li>
               <span class="li-title">Shipping:</span>
-              <span>$XX.XX</span>
+              <span>0</span>
             </li>
             <li>
               <span class="li-title">Total:</span>
-              <span class="total">$XX.XX</span>
+              <span id="globalTotalCost" class="total"></span>
             </li>
           </ul>
           <button class="checkout">Procees to checkout</button>
@@ -127,6 +66,95 @@
     <!--=============== MAIN JS ===============-->
     <script type="module" src="/assets/js/header-footer.js"></script>
 
-    <script src=""></script>
+    <script type="module">
+      import { setCookie, getCookie, updateCount } from "/assets/js/main.js";
+      import { getProductById } from "./assets/js/firebase.js";
+
+      function deleteEntryById(data, id) {
+        return data.filter((item) => item.id !== id);
+      }
+
+      window.removeCartItem = removeCartItem;
+      function removeCartItem(pid) {
+        var cart = getCookie("cart");
+        var cartAfterDeletion = deleteEntryById(cart, pid);
+        setCookie("cart", cartAfterDeletion, 30); // Store for 30 days, adjust as needed
+        updateCount("cart", cartAfterDeletion.length);
+        window.location.reload();
+      }
+
+      var cart = getCookie("cart");
+
+      var productsCache = [];
+
+      for (const cartItem of cart) {
+        var product = await getProductById(cartItem.id);
+
+        var element = {};
+        element.id = cartItem.id;
+        element.product = product;
+        productsCache.push(element);
+        addProductItemToCartGrid(cartItem.id, product, "cartBody");
+      }
+
+      function addProductItemToCartGrid(pid, product, divID) {
+        // Get the existing container by ID
+        const existingContainer = document.getElementById(divID);
+
+        // Create a template literal for the HTML structure
+        existingContainer.innerHTML += `
+                <tr>
+                  <td class="proudact-cart">
+                    <img src="${product.thumbnail}" alt="Product Image" />
+                    <span>${product.name}</span>
+                  </td>
+                  <td>${product.price}</td>
+                  <td>
+                    <input id="${pid}-quantityInput" onchange="updateSubTotal('${pid}'); updateAllSubTotals();" type="number" min="1" value="1" />
+                  </td>
+                  <td id="${pid}-subTotal">${product.price}</td>
+                  <td>
+                    <button class="remove-item">
+                      <a onclick="event.preventDefault(); removeCartItem('${pid}')" href=""
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-x-lg"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
+                          /></svg
+                      ></a>
+                    </button>
+                  </td>
+                </tr>
+              `;
+      }
+
+      window.updateSubTotal = updateSubTotal;
+      function updateSubTotal(pid) {
+        var pd = productsCache.find((item) => item.id === pid);
+        document.getElementById(`${pid}-subTotal`).innerText =
+          pd.product.price *
+          document.getElementById(`${pid}-quantityInput`).value;
+      }
+
+      window.updateAllSubTotals = updateAllSubTotals;
+      function updateAllSubTotals() {
+        var total = 0;
+        for (const cartItem of cart) {
+          total += parseInt(
+            document.getElementById(`${cartItem.id}-subTotal`).innerText
+          );
+        }
+        document.getElementById("globalSubtotalCost").innerText = total;
+        document.getElementById("globalTotalCost").innerText = total;
+      }
+
+      document.addEventListener("DOMContentLoaded", updateAllSubTotals());
+    </script>
   </body>
 </html>

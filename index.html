@@ -337,7 +337,14 @@
     <!--=============== FOOTER ===============-->
     <special-footer></special-footer>
     <!--=============== MAIN JS ===============-->
-    <script src="/assets/js/main.js"></script>
+    <script type="module" src="/assets/js/main.js"></script>
+
+    <script type="module">
+      import { changeWishState, addToCart } from "/assets/js/main.js";
+
+      window.changeWishState = changeWishState;
+      window.addToCart = addToCart;
+    </script>
 
     <script type="module" src="/assets/js/header-footer.js"></script>
 

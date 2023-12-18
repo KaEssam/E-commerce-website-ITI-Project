@@ -1,27 +1,36 @@
 /*=============== sales timer ===============*/
 
-const countDownDate = new Date("Dec 31, 2023 00:00:00").getTime();
+document.addEventListener("DOMContentLoaded", function () {
+  var path = window.location.pathname;
+  var page = path.split("/").pop();
 
-const x = setInterval(function () {
-  const now = new Date().getTime();
-  const distance = countDownDate - now;
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor(
-    (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-  );
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  document.getElementById("day").innerHTML = days;
-  document.getElementById("hour").innerHTML = hours;
-  document.getElementById("minute").innerHTML = minutes;
-  document.getElementById("second").innerHTML = seconds;
-
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById("banner__timer").innerHTML = "EXPIRED";
+  if (page != "index.html") {
+    return;
   }
-}, 1000);
+
+  const countDownDate = new Date("Dec 31, 2023 00:00:00").getTime();
+
+  const x = setInterval(function () {
+    const now = new Date().getTime();
+    const distance = countDownDate - now;
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("day").innerHTML = days;
+    document.getElementById("hour").innerHTML = hours;
+    document.getElementById("minute").innerHTML = minutes;
+    document.getElementById("second").innerHTML = seconds;
+
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("banner__timer").innerHTML = "EXPIRED";
+    }
+  }, 1000);
+});
 
 /*=============== rating ===============*/
 
@@ -157,47 +166,57 @@ function isValidEmail(email) {
 }
 
 /*=============== cart ===============*/
-function setCookie(name, value, days) {
+export function setCookie(name, value, days) {
   var expires = "";
   if (days) {
     var date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     expires = "; expires=" + date.toUTCString();
   }
+  if (Array.isArray(value)) {
+    document.cookie = name + "=" + JSON.stringify(value) + expires + "; path=/";
+    return;
+  }
   document.cookie = name + "=" + value + expires + "; path=/";
 }
 
-function getCookie(name) {
+export function getCookie(name) {
   var nameEQ = name + "=";
   var ca = document.cookie.split(";");
   for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
     while (c.charAt(0) == " ") c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    if (c.indexOf(nameEQ) == 0)
+      return JSON.parse(c.substring(nameEQ.length, c.length));
   }
   return null;
 }
 
 // Function to handle the "Add to Cart" button click
-export function addToCart(event, pid, quantity = 1) {
-  event.preventDefault(); // Prevent the default behavior
+export function addToCart(pid, quantity = 1) {
   var cart = getCookie("cart") || [];
-  cart.push({ id: pid, quantity: quantity });
+  if (!JSON.stringify(cart).includes(pid)) {
+    cart.push({ id: pid, quantity: quantity });
+  }
   setCookie("cart", cart, 30); // Store for 30 days, adjust as needed
   updateCount("cartBtn", cart.length);
 }
 
 // Function to handle the "Add to Wishlist" button click
-function addToWishlist() {
-  event.preventDefault(); // Prevent the default behavior
-  var wishlistClicks = getCookie("wishlistClicks") || 0;
-  wishlistClicks++;
-  setCookie("wishlistClicks", wishlistClicks, 30); // Store for 30 days, adjust as needed
-  updateCount("wishlistBtn", wishlistClicks);
+export function changeWishState(pid) {
+  var wishlist = getCookie("wishlist") || [];
+  if (wishlist.includes(pid)) {
+    let index = wishlist.indexOf(pid);
+    wishlist.splice(index, 1);
+  } else {
+    wishlist.push(pid);
+  }
+  setCookie("wishlist", wishlist, 30); // Store for 30 days, adjust as needed
+  updateCount("wishlistBtn", wishlist.length);
 }
 
 // Function to update the count displayed in the header
-function updateCount(btnId, count) {
+export function updateCount(btnId, count) {
   var btn = document.getElementById(btnId);
   if (btn) {
     var countElement = btn.querySelector(".count");
@@ -205,4 +224,13 @@ function updateCount(btnId, count) {
       countElement.textContent = count;
     }
   }
+}
+
+export function removeWishItem(pid) {
+  var wishlist = getCookie("wishlist");
+  let index = wishlist.indexOf(pid);
+  wishlist.splice(index, 1);
+  setCookie("wishlist", wishlist, 30); // Store for 30 days, adjust as needed
+  updateCount("wishlistBtn", wishlist.length);
+  window.location.reload();
 }
