@@ -1,0 +1,140 @@
+@import "/assets/css/styles.css";
+
+* {
+  font-family: var(--body-font);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: var(--normal-font-size);
+  min-height: 100vh;
+  background-color: var(--Background);
+  margin: 0;
+}
+
+header {
+  background-color: var(--colo-primary);
+  color: var(--colo-white-1);
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  margin: 0;
+  font-size: var(--h2-font-size);
+  color: var(--colo-white-1);
+}
+
+nav {
+  background-color: var(--colo-dark-1);
+  color: var(--colo-white-1);
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--colo-white-1);
+  margin: 0 1rem;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--Primary);
+}
+
+nav span {
+  margin: 0 0.5rem;
+  color: var(--label);
+}
+
+main {
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+  margin: 20px 0;
+}
+
+.form-container,
+#categories-container {
+  flex: 1;
+  padding: 20px;
+  background-color: var(--colo-white-1);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 10px;
+}
+
+.form-container {
+  max-width: 400px;
+}
+
+.form-container h2,
+#categories-container h2 {
+  color: var(--Body);
+  margin-bottom: 20px;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--label);
+}
+
+.form-container input,
+.form-container button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid var(--Line);
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: var(--Input-Background);
+  color: var(--Body);
+  transition: border-color 0.3s;
+}
+
+.form-container input:focus,
+.form-container button:focus {
+  outline: none;
+  border-color: var(--Primary);
+}
+
+.form-container button {
+  background-color: var(--colo-primary);
+  color: var(--colo-white-1);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+  background-color: var(--Primary-darkmode);
+}
+
+#categories-container {
+  background-color: var(--colo-white-1);
+}
+
+footer {
+  background-color: var(--colo-dark-1);
+  color: var(--colo-white-1);
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+  margin-top: auto;
+  height: auto;
+}
