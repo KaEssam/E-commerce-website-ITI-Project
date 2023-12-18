@@ -110,7 +110,9 @@
                   </td>
                   <td>${product.price}</td>
                   <td>
-                    <input id="${pid}-quantityInput" onchange="updateSubTotal('${pid}'); updateAllSubTotals();" type="number" min="1" value="1" />
+                    <input id="${pid}-quantityInput" onchange="updateSubTotal('${pid}'); updateAllSubTotals();" type="number" min="1" max="${getProductMax(
+          pid
+        )}" value="1" />
                   </td>
                   <td id="${pid}-subTotal">${product.price}</td>
                   <td>
@@ -152,6 +154,12 @@
         }
         document.getElementById("globalSubtotalCost").innerText = total;
         document.getElementById("globalTotalCost").innerText = total;
+      }
+
+      window.getProductMax = getProductMax;
+      function getProductMax(pid) {
+        var pd = productsCache.find((item) => item.id === pid);
+        return pd.product.quantity;
       }
 
       document.addEventListener("DOMContentLoaded", updateAllSubTotals());
